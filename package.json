@@ -1,6 +1,6 @@
 {
   "name": "facilit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -22,6 +22,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "bcrypt": "^6.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "prisma": "^7.8.0",
