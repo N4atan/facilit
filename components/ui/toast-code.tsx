@@ -15,7 +15,9 @@ export const showCodeToast = (message: string, code: any, styleText: string) => 
           color: `var(--color-${styleText})`,
           padding: '12px',
           borderRadius: '6px',
-          overflowX: 'auto',
+          overflowX: 'hidden',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-all',
           fontSize: '13px',
           fontFamily: 'Courier New, Courier, monospace',
           margin: 0,
@@ -31,7 +33,7 @@ export const showCodeToast = (message: string, code: any, styleText: string) => 
       duration: 5000, // Dá mais tempo para o usuário ler o código
       style: {
         maxWidth: '450px', // Alarga o toast para o código não quebrar linha à toa
-        width: 'auto',
+        width: '100%',
       },
     }
   );
