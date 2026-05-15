@@ -2,12 +2,13 @@
 
 import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById } from "@/services/user-service";
 import { User } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 export async function handleCreateNewUser(userData: { name: string, email: string, password: string }): Promise<User> {
     try {
-        const name = userData.name;
-        const email = userData.email;
-        const password = userData.password;
+        const name: string = userData.name;
+        const email: string = userData.email.toLowerCase();
+        const password: string = userData.password;
 
         if (!name || !email || !password) {
             throw new Error("Name, email, and password are required");
@@ -19,10 +20,13 @@ export async function handleCreateNewUser(userData: { name: string, email: strin
             throw new Error("User already exists");
         }
 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword: string = await bcrypt.hash(password, salt);
+
 
         // revalidatePath();
 
-        return await createNewUser(name, email, password);
+        return await createNewUser(name, email, hashedPassword);
     } catch (error) {
         console.error(error);
         throw error;

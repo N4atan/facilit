@@ -2,13 +2,13 @@
 import { prisma } from "@/lib/prisma";
 import { User } from "@prisma/client";
 
-export async function createNewUser(name: string, email: string, password: string): Promise<User> {
+export async function createNewUser(name: string, email: string, hashedPassword: string): Promise<User> {
     return prisma.user.create({
         data: {
             name,
             email,
-            password,
-            previousPassword: password
+            password: hashedPassword,
+            previousPassword: hashedPassword
         }
     });
 }
