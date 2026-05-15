@@ -3,11 +3,11 @@
 import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById } from "@/services/user-service";
 import { User } from "@prisma/client";
 
-export async function handleCreateNewUser(formData: FormData): Promise<Object> {
+export async function handleCreateNewUser(userData: { name: string, email: string, password: string }): Promise<User> {
     try {
-        const name = formData.get("name") as string;
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
+        const name = userData.name;
+        const email = userData.email;
+        const password = userData.password;
 
         if (!name || !email || !password) {
             throw new Error("Name, email, and password are required");
@@ -19,14 +19,13 @@ export async function handleCreateNewUser(formData: FormData): Promise<Object> {
             throw new Error("User already exists");
         }
 
-        const newUser = await createNewUser(name, email, password)
 
         // revalidatePath();
 
-        return { message: "User created successfully", user: newUser }
+        return await createNewUser(name, email, password);
     } catch (error) {
         console.error(error);
-        return { message: "Failed to create user", error };
+        throw error;
     }
 }
 
