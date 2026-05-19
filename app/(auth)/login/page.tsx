@@ -1,27 +1,12 @@
 "use client"
 
-import { Mail, KeyRound } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { LoginForm } from "@/components/layout/auth/login-form";
+import { RegisterForm } from "@/components/layout/auth/register-form";
+import { useState } from 'react';
 
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    const onSubmit = async (e: React.FormEvent) => {
-        try {
-            e.preventDefault();
-            setIsLoading(true);
-
-        } catch (error: any) {
-            
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
+    const [ isLogin, setIsLogin ] = useState(true)
 
     return (
         <div className="flex h-screen w-full bg-base-200 lg:bg-white">
@@ -42,43 +27,7 @@ export default function LoginPage() {
 
             {/* Seção do Formulário */}
             <div className="flex-1 flex items-center justify-center p-8 lg:p-16 w-full">
-                <div className="card w-full max-w-md shrink-0 shadow-2xl lg:shadow-none bg-white">
-                    <div className="card-body">
-                        <div className="text-center lg:text-left mb-8">
-                            <h2 className="text-3xl font-bold text-content">Bem-vindo(a)</h2>
-                            <p className="text-content mt-2 opacity-80">Insira suas credenciais para acessar o painel.</p>
-                        </div>
-
-                        <form id="form-login">
-                            <fieldset className="fieldset">
-                                <legend className="fieldset-legend">E-mail</legend>
-                                <label htmlFor="" className="input w-full">
-                                    <Mail size={18} />
-                                    <input type="text" placeholder="email@senacrs.com.br" disabled={isLoading} required onChange={(e) => setEmail(e.target.value)} />
-                                </label>
-                            </fieldset>
-
-                            <fieldset className="fieldset">
-                                <legend className="fieldset-legend">Senha</legend>
-                                <label htmlFor="" className="input w-full">
-                                    <KeyRound size={18} />
-                                    <input type="password" placeholder="**********" disabled={isLoading} required onChange={(e) => setPassword(e.target.value)} />
-                                </label>
-                            </fieldset>
-
-                            
-
-                            <div className="form-control mt-10">
-                                <button type="submit" className="btn btn-primary w-full">Entrar</button>
-                            </div>
-                        </form>
-
-                        <div className="divider text-content opacity-80 text-sm mt-8">Precisa de acesso?</div>
-                        <div className="text-center">
-                            <a className="link link-hover text-content text-sm font-medium" onClick={() => toast("Em Desenvolvimento!", {icon: "📎"})}>Solicitar criação de conta</a>
-                        </div>
-                    </div>
-                </div>
+                { isLogin ? <LoginForm setIsLogin={setIsLogin} /> : <RegisterForm setIsLogin={setIsLogin} /> }
             </div>
         </div>
     );
