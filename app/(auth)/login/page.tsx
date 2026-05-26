@@ -9,7 +9,7 @@ export default function LoginPage() {
     const [ isLogin, setIsLogin ] = useState(true)
 
     return (
-        <div className="flex h-screen w-full bg-base-200 lg:bg-white">
+        <div className="flex h-screen w-full bg-base-200 ">
             {/* Seção da Imagem */}
             <div
                 className="hidden lg:flex flex-1 relative bg-cover bg-center"

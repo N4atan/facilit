@@ -21,6 +21,7 @@ export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boo
             const result = await handleCreateNewUser({ name, email, password });
 
             showCodeToast("Usuário criado com sucesso!", result, 'success');
+            resetForm();
 
         } catch (error: any) {
             showCodeToast("Erro ao criar usuário", error.message, 'error');

@@ -3,6 +3,7 @@
 import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById, UserWithoutPassword } from "@/services/user-service";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { revalidatePath } from "next/cache";
 
 export async function handleCreateNewUser(userData: { name: string, email: string, password: string }): Promise<User> {
     try {
@@ -24,9 +25,9 @@ export async function handleCreateNewUser(userData: { name: string, email: strin
         const hashedPassword: string = await bcrypt.hash(password, salt);
 
 
-        // revalidatePath();
-
-        return await createNewUser(name, email, hashedPassword);
+        const user = await createNewUser(name, email, hashedPassword);
+        revalidatePath("/usuarios");
+        return user;
     } catch (error) {
         console.error(error);
         throw error;
@@ -46,6 +47,7 @@ export async function handleFetchAllUsers(): Promise<UserWithoutPassword[]> {
 export async function handleDeleteUserById(userId: string): Promise<void> {
     try {
         await deleteUserById(userId);
+        revalidatePath("/usuarios");
     } catch (error) {
         console.error(error);
         throw error;
