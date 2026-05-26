@@ -2,6 +2,8 @@
 import { prisma } from "@/lib/prisma";
 import { User } from "@prisma/client";
 
+export type UserWithoutPassword = Omit<User, "password" | "previousPassword">;
+
 export async function createNewUser(name: string, email: string, hashedPassword: string): Promise<User> {
     return prisma.user.create({
         data: {
@@ -13,8 +15,13 @@ export async function createNewUser(name: string, email: string, hashedPassword:
     });
 }
 
-export async function getAllUsers(): Promise<User[]> {
-    return prisma.user.findMany();
+export async function getAllUsers(): Promise<UserWithoutPassword[]> {
+    return prisma.user.findMany({
+        omit: {
+            password: true,
+            previousPassword: true,
+        }
+    });
 }
 
 export async function getUserById(id: string): Promise<User | null> {

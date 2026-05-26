@@ -7,7 +7,7 @@ import { KeyIcon, KeyRound, Mail, User as UserIcon } from "lucide-react";
 import { showCodeToast } from "../ui/toast-code";
 
 
-export default function UserCreateForm() {
+export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boolean, onCreateUser?: () => void}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,15 +21,27 @@ export default function UserCreateForm() {
             const result = await handleCreateNewUser({ name, email, password });
 
             showCodeToast("Usuário criado com sucesso!", result, 'success');
+
         } catch (error: any) {
             showCodeToast("Erro ao criar usuário", error.message, 'error');
         } finally {
             setIsLoading(false);
+            resetForm();
+            if (isModal) {
+                (document.getElementById("modal_add_user") as HTMLDialogElement)?.close();
+                onCreateUser?.();
+            }
         }
     }
 
+    const resetForm = () => {
+        setName("");
+        setEmail("");
+        setPassword("");
+    }
+
     return (
-        <div className="card bg-base-100 w-96 shadow-sm">
+        <div className={`card bg-base-100 w-96 shadow-sm ${isModal ? "modal-box" : ""}`}>
             <div className="card-body">
                 <h2 className="card-title">Adicionando Novo Usuário</h2>
                 <form id="#form-registerUser" onSubmit={onSubmit}>
@@ -62,6 +74,12 @@ export default function UserCreateForm() {
                 </form>
 
                 <div className="card-actions justify-end mt-6">
+                    {isModal && (
+                        <button className="btn" onClick={() => (document.getElementById("modal_add_user") as HTMLDialogElement)?.close()}>
+                            Cancelar
+                        </button>
+                    )}
+                    
                     <button className="btn btn-primary" form="#form-registerUser" type="submit" disabled={isLoading}>
                         {isLoading ? (
                             <span className="loading loading-spinner loading-xs"></span>

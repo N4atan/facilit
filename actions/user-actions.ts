@@ -1,6 +1,6 @@
 "use server"
 
-import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById } from "@/services/user-service";
+import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById, UserWithoutPassword } from "@/services/user-service";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
@@ -33,7 +33,7 @@ export async function handleCreateNewUser(userData: { name: string, email: strin
     }
 }
 
-export async function handleFetchAllUsers(): Promise<User[]> {
+export async function handleFetchAllUsers(): Promise<UserWithoutPassword[]> {
     try {
         return await getAllUsers();
     } catch (error) {
@@ -43,3 +43,11 @@ export async function handleFetchAllUsers(): Promise<User[]> {
 }
 
 
+export async function handleDeleteUserById(userId: string): Promise<void> {
+    try {
+        await deleteUserById(userId);
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
