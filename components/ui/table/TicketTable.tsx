@@ -1,29 +1,49 @@
 "use client";
 
-import { FilePen, File } from "lucide-react";
+import { FilePen, File, FileX } from "lucide-react";
 import { TicketWithAuthor } from "@/services/ticket-service";
+import toast from "react-hot-toast";
+import { showCodeToast } from "../toast-code";
+import { handleDeleteTicketByIdCSC } from "@/actions/ticket-actions";
+import TicketCreateModal from "@/components/layout/ticket-create-modal";
 
 type Props = {
     tickets: TicketWithAuthor[];
     isLoading?: boolean;
 }
 
-function TicketStatus(status: string) {
+import { TicketStatus as PrismaTicketStatus } from "@/lib/enums";
+
+export function TicketStatus(status: PrismaTicketStatus | string) {
     switch (status) {
-        case "ABERTO":
+        case PrismaTicketStatus.ABERTO:
             return <span className="badge badge-primary ">ABERTO</span>;
-        case "EM_ANDAMENTO":
+        case PrismaTicketStatus.EM_ANDAMENTO:
             return <span className="badge badge-warning ">EM ANDAMENTO</span>;
-        case "RESOLVIDO":
+        case PrismaTicketStatus.RESOLVIDO:
             return <span className="badge badge-success ">RESOLVIDO</span>;
-        case "FECHADO":
-            return <span className="badge badge-error ">FECHADO</span>;
+        case PrismaTicketStatus.CANCELADO:
+            return <span className="badge badge-error ">CANCELADO</span>;
         default:
             return <span className="badge badge-ghost">{status}</span>;
     }
 }
 
+
+
 export default function TicketTable({ tickets, isLoading }: Props) {
+
+    const handleDelete = async (id_csc: string) => {
+        try {
+            const confirm = window.confirm("Tem certeza que deseja excluir este chamado?");
+            if (!confirm) return;
+
+            await handleDeleteTicketByIdCSC(id_csc);
+            toast.success("Chamado removido com sucesso!");
+        } catch (error: any) {
+            showCodeToast("Erro ao remover chamado", error.message, "error");
+        }
+    }
 
     if (isLoading) return (
         <div className="skeleton w-full h-32"></div>
@@ -46,7 +66,7 @@ export default function TicketTable({ tickets, isLoading }: Props) {
 
     return (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-            <table className="table table-zebra">
+            <table className="table table-zebra overflow-x-auto">
                 {/* head */}
                 <thead>
                     <tr>
@@ -69,9 +89,12 @@ export default function TicketTable({ tickets, isLoading }: Props) {
                             <td>{TicketStatus(ticket.status)}</td>
                             <td>{ticket.author.name}</td>
                             <td>
-                                <button className="btn btn-sm btn-ghost tooltip tooltip-info" data-tip="Editar">
-                                    <FilePen size={16} />
-                                </button>
+                                <div className="flex gap-2">
+                                    <TicketCreateModal isEditing ticket={ticket} />
+                                    <button className="btn btn-sm btn-ghost tooltip tooltip-error" data-tip="Excluir" onClick={() => handleDelete(ticket.id_csc)}>
+                                        <FileX size={16} />
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}

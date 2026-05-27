@@ -22,12 +22,19 @@ model User {
 }
 
 model Ticket {
-  id           String   @id @default(uuid())
-  id_csc       String   @unique
+  id           String       @id @default(uuid())
+  id_csc       String       @unique
   category     String
   description  String
-  openAt       DateTime @db.Date
-  status       String   @default("ABERTO")
+  openAt       DateTime     @db.Date
+  status       TicketStatus @default(EM_ANDAMENTO)
   authorId     String
-  author       User     @relation(fields: [authorId], references:[id])
+  author       User         @relation(fields: [authorId], references:[id])
+}
+
+enum TicketStatus {
+  ABERTO
+  EM_ANDAMENTO
+  RESOLVIDO
+  CANCELADO
 }

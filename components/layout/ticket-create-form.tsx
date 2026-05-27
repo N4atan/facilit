@@ -2,20 +2,30 @@
 
 import { useState } from "react";
 import { Ticket } from "@prisma/client";
-import { handleCreateNewTicket } from "@/actions/ticket-actions";
-import { ClipboardList, Tag, FileText } from "lucide-react";
+import { TicketStatus } from "@/lib/enums";
+import { handleCreateNewTicket, handleUpdateTicket } from "@/actions/ticket-actions";
+import { ClipboardList, Tag } from "lucide-react";
 import { showCodeToast } from "../ui/toast-code";
+import toast from "react-hot-toast";
 
 interface TicketCreateFormProps {
     isModal?: boolean;
     onCreateTicket?: () => void;
+    ticket?: Ticket;
 }
 
-export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCreateFormProps) {
-    const [idCsc, setIdCsc] = useState("");
-    const [category, setCategory] = useState("");
-    const [description, setDescription] = useState("");
-    const [openAt, setOpenAt] = useState<string>('');
+export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: TicketCreateFormProps) {
+    const [idCsc, setIdCsc] = useState(ticket?.id_csc || "");
+    const [category, setCategory] = useState(ticket?.category || "");
+    const [description, setDescription] = useState(ticket?.description || "");
+    const [openAt, setOpenAt] = useState<string>(
+        ticket?.openAt
+            ? new Date(ticket.openAt).toISOString().split('T')[0]
+            : ""
+    );
+    const [status, setStatus] = useState<TicketStatus>(
+        (ticket?.status as unknown as TicketStatus) || TicketStatus.EM_ANDAMENTO
+    );
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -23,22 +33,34 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
             e.preventDefault();
             setIsLoading(true);
 
-            const result = await handleCreateNewTicket({
-                id_csc: idCsc,
-                category: category,
-                description: description,
-                openAt: new Date(openAt),
-            });
+            if (ticket) {
+                const result = await handleUpdateTicket(ticket.id_csc, {
+                    category,
+                    description,
+                    openAt: new Date(openAt),
+                    status,
+                });
 
-            showCodeToast("Chamado criado com sucesso!", result, 'success');
-            resetForm();
+                showCodeToast("Chamado atualizado com sucesso!", result, 'success');
+            } else {
+                const result = await handleCreateNewTicket({
+                    id_csc: idCsc,
+                    category,
+                    description,
+                    openAt: new Date(openAt),
+                });
+
+                toast.success("Chamado criado com sucesso!");
+                resetForm();
+            }
 
             if (isModal) {
-                (document.getElementById("modal_add_ticket") as HTMLDialogElement)?.close();
+                const modalId = ticket ? `modal_edit_ticket_${ticket.id}` : "modal_add_ticket";
+                (document.getElementById(modalId) as HTMLDialogElement)?.close();
                 onCreateTicket?.();
             }
         } catch (error: any) {
-            showCodeToast("Erro ao criar chamado", error.message, 'error');
+            showCodeToast(ticket ? "Erro ao atualizar chamado" : "Erro ao criar chamado", error.message, 'error');
         } finally {
             setIsLoading(false);
         }
@@ -48,13 +70,18 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
         setIdCsc("");
         setCategory("");
         setDescription("");
+        setOpenAt("");
     };
+
+    const formId = ticket ? `form-editTicket-${ticket.id}` : "form-registerTicket";
 
     return (
         <div className={`card bg-base-100 w-96 shadow-sm ${isModal ? "modal-box" : ""}`}>
             <div className="card-body">
-                <h2 className="card-title text-xl font-bold">Registrar Novo Chamado</h2>
-                <form id="form-registerTicket" onSubmit={onSubmit}>
+                <h2 className="card-title text-xl font-bold">
+                    {ticket ? "Editar Chamado" : "Registrar Novo Chamado"}
+                </h2>
+                <form id={formId} onSubmit={onSubmit}>
 
                     <fieldset className="fieldset mt-4">
                         <legend className="fieldset-legend">Id da CSC</legend>
@@ -64,13 +91,12 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
                                 type="text"
                                 placeholder="Digite o ID do chamado na CSC"
                                 value={idCsc}
-                                disabled={isLoading}
+                                disabled={isLoading || !!ticket}
                                 required
                                 onChange={(e) => setIdCsc(e.target.value)}
                                 className="grow"
                             />
                         </label>
-
                     </fieldset>
 
                     <fieldset className="fieldset mt-2">
@@ -106,6 +132,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
                         <div className="date-picker-input">
                             <input
                                 type="date"
+                                value={openAt}
                                 disabled={isLoading}
                                 required
                                 onChange={(e) => setOpenAt(e.target.value)}
@@ -114,6 +141,25 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
                         </div>
                     </fieldset>
 
+                    {ticket && (
+                        <fieldset className="fieldset mt-2">
+                            <legend className="fieldset-legend">Status</legend>
+                            <select
+                                value={status}
+                                disabled={isLoading}
+                                required
+                                onChange={(e) => setStatus(e.target.value as TicketStatus)}
+                                className="select w-full"
+                            >
+                                <option disabled={true}>Selecione o status</option>
+                                <option value={TicketStatus.ABERTO}>ABERTO</option>
+                                <option value={TicketStatus.EM_ANDAMENTO}>EM ANDAMENTO</option>
+                                <option value={TicketStatus.RESOLVIDO}>RESOLVIDO</option>
+                                <option value={TicketStatus.CANCELADO}>CANCELADO</option>
+                            </select>
+                        </fieldset>
+                    )}
+
                 </form>
 
                 <div className="card-actions justify-end mt-6">
@@ -121,7 +167,10 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
                         <button
                             type="button"
                             className="btn btn-ghost"
-                            onClick={() => (document.getElementById("modal_add_ticket") as HTMLDialogElement)?.close()}
+                            onClick={() => {
+                                const modalId = ticket ? `modal_edit_ticket_${ticket.id}` : "modal_add_ticket";
+                                (document.getElementById(modalId) as HTMLDialogElement)?.close();
+                            }}
                             disabled={isLoading}
                         >
                             Cancelar
@@ -130,14 +179,14 @@ export default function TicketCreateForm({ isModal, onCreateTicket }: TicketCrea
 
                     <button
                         className="btn btn-primary"
-                        form="form-registerTicket"
+                        form={formId}
                         type="submit"
                         disabled={isLoading}
                     >
                         {isLoading ? (
                             <span className="loading loading-spinner loading-xs"></span>
                         ) : (
-                            <span>Registrar</span>
+                            <span>{ticket ? "Salvar" : "Registrar"}</span>
                         )}
                     </button>
                 </div>

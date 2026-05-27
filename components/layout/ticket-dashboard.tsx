@@ -1,0 +1,47 @@
+"use client";
+
+import { useState } from "react";
+import { TabListView } from "@/components/ui/tablist-view";
+import { InputSearch } from "@/components/ui/input-search";
+import { CloudDownload } from "lucide-react";
+import TicketCreateModal from "@/components/layout/ticket-create-modal";
+import TicketTable from "@/components/ui/table/TicketTable";
+import { TicketWithAuthor } from "@/services/ticket-service";
+import { TicketStatus } from "@/lib/enums";
+import TicketKanbanColumn from "./ticket-kanban-column";
+
+interface TicketDashboardProps {
+    tickets: TicketWithAuthor[];
+}
+
+export default function TicketDashboard({ tickets }: TicketDashboardProps) {
+    const [tab, setTab] = useState<"table" | "kanban">("kanban");
+
+    return (
+        <div className="card border border-base-content/10 rounded-lg p-4 gap-5">
+            <div className="flex justify-end items-center gap-5 mt-4">
+                <TabListView activeTab={tab} setActiveTab={(e) => setTab(e as "table" | "kanban")} />
+
+                <InputSearch placeholder="Pesquise pelo ID" />
+
+                <button className="btn btn-outline">
+                    <CloudDownload size={16} />
+                    Exportar
+                </button>
+
+                <TicketCreateModal />
+            </div>
+
+            {tab === "table" ? (
+                <TicketTable tickets={tickets} />
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+                    <TicketKanbanColumn status={TicketStatus.ABERTO} tickets={tickets} />
+                    <TicketKanbanColumn status={TicketStatus.EM_ANDAMENTO} tickets={tickets} />
+                    <TicketKanbanColumn status={TicketStatus.RESOLVIDO} tickets={tickets} />
+                    <TicketKanbanColumn status={TicketStatus.CANCELADO} tickets={tickets} />
+                </div>
+            )}
+        </div>
+    );
+}

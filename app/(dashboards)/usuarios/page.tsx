@@ -13,7 +13,7 @@ export default function Home() {
             <div className="flex justify-end items-center gap-5">
                 {/* TODO: Implementar filter, sort */}
                 {/* TODO: Implementar formas de visualização */}
-                <InputSearch />
+                <InputSearch placeholder="Pesquise pelo nome ou email" />
                 <AddUserModal />
             </div>
 

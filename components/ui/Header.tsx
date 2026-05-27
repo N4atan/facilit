@@ -4,6 +4,11 @@ import { ActionListItem } from "./action-list-item";
 import { LogOut } from "lucide-react";
 import Link from "next/dist/client/link";
 
+const links = [
+    { href: "/chamados/csc", label: "Chamados CSC" },
+    { href: "/usuarios", label: "Usuários" },
+]
+
 export default async function Header() {
     const session = await auth();
 
@@ -17,32 +22,22 @@ export default async function Header() {
                     <ul
                         tabIndex={-1}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><Link href="/chamados/csc">Chamados CSC</Link></li>
-                        <li>
-                            <a>Sistema</a>
-                            <ul className="p-2">
-                                <li><Link href="/usuarios">Usuários</Link></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-
+                        {links.map((link) => (
+                            <li key={link.href}>
+                                <Link href={link.href}>{link.label}</Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">Facilit - SL</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><a>Item 1</a></li>
-                    <li>
-                        <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2 bg-base-100 w-40 z-1">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                    <li><a>Item 3</a></li>
+                    {links.map((link) => (
+                        <li key={link.href}>
+                            <Link href={link.href}>{link.label}</Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div className="navbar-end">
