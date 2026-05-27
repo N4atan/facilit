@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { logout } from "@/actions/auth-actions";
 import { ActionListItem } from "./action-list-item";
 import { LogOut } from "lucide-react";
+import Link from "next/dist/client/link";
 
 export default async function Header() {
     const session = await auth();
@@ -16,15 +17,15 @@ export default async function Header() {
                     <ul
                         tabIndex={-1}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
+                        <li><Link href="/chamados/csc">Chamados CSC</Link></li>
                         <li>
-                            <a>Parent</a>
+                            <a>Sistema</a>
                             <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
+                                <li><Link href="/usuarios">Usuários</Link></li>
                                 <li><a>Submenu 2</a></li>
                             </ul>
                         </li>
-                        <li><a>Item 3</a></li>
+
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">Facilit - SL</a>

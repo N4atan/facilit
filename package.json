@@ -1,6 +1,6 @@
 {
   "name": "facilit",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,6 +14,7 @@
     "@prisma/client": "^7.8.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",
+    "cally": "^0.9.2",
     "dotenv": "^17.4.2",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

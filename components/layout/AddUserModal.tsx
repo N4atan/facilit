@@ -11,7 +11,7 @@ export default function AddUserModal() {
 
     return (
         <>
-            <button className="btn btn-sm btn-primary btn-outline" onClick={openModal}>
+            <button className="btn btn-primary btn-outline" onClick={openModal}>
                 <UserPlus size={16} />
                 Adicionar
             </button>
