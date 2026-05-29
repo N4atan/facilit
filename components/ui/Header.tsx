@@ -1,12 +1,12 @@
 import { auth } from "@/auth"
 import { logout } from "@/actions/auth-actions";
 import { ActionListItem } from "./action-list-item";
-import { LogOut } from "lucide-react";
+import { ChevronDown, LogOut, Users } from "lucide-react";
 import Link from "next/dist/client/link";
+import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
     { href: "/chamados/csc", label: "Chamados CSC" },
-    { href: "/usuarios", label: "Usuários" },
 ]
 
 export default async function Header() {
@@ -38,6 +38,19 @@ export default async function Header() {
                             <Link href={link.href}>{link.label}</Link>
                         </li>
                     ))}
+                    <li className="dropdown">
+                        <div tabIndex={0} >
+                            Administrador
+                            <ChevronDown size={12} />
+                        </div>
+                        <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            <ActionListItem
+                                text="Usuários"
+                                icon={<Users size={16} />}
+                                href="/usuarios"
+                            />
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div className="navbar-end">
@@ -53,7 +66,7 @@ export default async function Header() {
                         <ul
                             tabIndex={-1}
                             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li className="menu-title text-base-content/70">
+                            <li className="menu-title text-base-content/70 border-b border-base-200">
                                 <span>{session.user.email}</span>
                             </li>
                             <li>
@@ -63,6 +76,8 @@ export default async function Header() {
                                 </a>
                             </li>
                             <li><a>Settings</a></li>
+
+                            <ThemeToggle />
 
                             {/* Usando o nosso novo componente de item da lista interativo */}
                             <ActionListItem

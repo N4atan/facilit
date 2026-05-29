@@ -9,6 +9,7 @@ import TicketTable from "@/components/ui/table/TicketTable";
 import { TicketWithAuthor } from "@/services/ticket-service";
 import { TicketStatus } from "@/lib/enums";
 import TicketKanbanColumn from "./ticket-kanban-column";
+import { exportToExcel } from "@/lib/xlsx-exportes";
 
 interface TicketDashboardProps {
     tickets: TicketWithAuthor[];
@@ -22,9 +23,9 @@ export default function TicketDashboard({ tickets }: TicketDashboardProps) {
             <div className="flex justify-end items-center gap-5 mt-4">
                 <TabListView activeTab={tab} setActiveTab={(e) => setTab(e as "table" | "kanban")} />
 
-                <InputSearch placeholder="Pesquise pelo ID" />
+                {/* TODO: Filtros por autor */}
 
-                <button className="btn btn-outline">
+                <button className="btn btn-soft btn-secondary" onClick={() => exportToExcel({ data: tickets, name: `Facilit-ChamadosCSC` })}>
                     <CloudDownload size={16} />
                     Exportar
                 </button>

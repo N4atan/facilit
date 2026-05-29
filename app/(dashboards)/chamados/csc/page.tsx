@@ -17,16 +17,16 @@ export default async function Home() {
 
             <div className="stats border border-base-content/10 stats-vertical md:stats-horizontal">
                 <div className="stat">
-                    <div className="stat-title">Chamados Abertos</div>
+                    <div className="stat-title">Chamados em Atendimento</div>
                     <div className="stat-value">{openTicketsCount}</div>
                 </div>
                 <div className="stat">
                     <div className="stat-title">Chamados Encerrados</div>
-                    <div className="stat-value">{closedTicketsCount}</div>
+                    <div className="stat-value text-success">{closedTicketsCount}</div>
                 </div>
                 <div className="stat">
                     <div className="stat-title">Chamados Cancelados</div>
-                    <div className="stat-value">{cancelTicketsCount}</div>
+                    <div className="stat-value text-error">{cancelTicketsCount}</div>
                 </div>
                 <div className="stat">
                     <div className="stat-title">Total de Chamados</div>

@@ -3,9 +3,9 @@ import { Search } from "lucide-react";
 
 export function InputSearch({ placeholder }: { placeholder: string }) {
     return (
-        <label className="input">
-            <Search className="h-[1em] opacity-50" />
-            <input type="search" required placeholder={placeholder} />
-        </label>
+        <div className="join">
+            <input className="input join-item overflow-ellipsis" type="search" required placeholder={placeholder} />
+            <button className="btn btn-soft join-item"><Search size={16} /></button>
+        </div>
     )
 }

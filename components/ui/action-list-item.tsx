@@ -1,26 +1,36 @@
 "use client"
 
+import Link from "next/dist/client/link";
 import { ReactNode, useTransition } from "react";
 
 interface ActionListItemProps {
     text: string;
     icon?: ReactNode;
-    action: () => any | Promise<any>;
+    action?: () => any | Promise<any>;
+    href?: string;
 }
 
-export function ActionListItem({ text, icon, action }: ActionListItemProps) {
+export function ActionListItem({ text, icon, action, href }: ActionListItemProps) {
     const [isPending, startTransition] = useTransition();
 
     return (
         <li>
-            <a 
-                onClick={() => startTransition(() => action())} 
-                className={`flex items-center gap-2 cursor-pointer ${isPending ? "opacity-50 pointer-events-none" : ""}`}
-            >
-                {icon && <span>{icon}</span>}
-                {text}
-                {isPending && <span className="loading loading-spinner loading-xs ml-auto"></span>}
-            </a>
+            {href ? (
+                <Link href={href} className={`flex items-center gap-2 cursor-pointer ${isPending ? "opacity-50 pointer-events-none" : ""}`}>
+                    {icon && <span>{icon}</span>}
+                    {text}
+                    {isPending && <span className="loading loading-spinner loading-xs ml-auto"></span>}
+                </Link>
+            ) : (
+                <a
+                    onClick={() => startTransition(() => action ? action() : null)}
+                    className={`flex items-center gap-2 cursor-pointer ${isPending ? "opacity-50 pointer-events-none" : ""}`}
+                >
+                    {icon && <span>{icon}</span>}
+                    {text}
+                    {isPending && <span className="loading loading-spinner loading-xs ml-auto"></span>}
+                </a>
+            )}
         </li>
     );
 }
