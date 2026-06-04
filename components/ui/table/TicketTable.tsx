@@ -17,15 +17,15 @@ import { TicketStatus as PrismaTicketStatus } from "@/lib/enums";
 export function TicketStatus(status: PrismaTicketStatus | string) {
     switch (status) {
         case PrismaTicketStatus.ABERTO:
-            return <span className="badge badge-primary ">ABERTO</span>;
+            return <span className="badge badge-primary whitespace-nowrap">ABERTO</span>;
         case PrismaTicketStatus.EM_ANDAMENTO:
-            return <span className="badge badge-warning ">EM ANDAMENTO</span>;
+            return <span className="badge badge-warning whitespace-nowrap">EM ANDAMENTO</span>;
         case PrismaTicketStatus.RESOLVIDO:
-            return <span className="badge badge-success ">RESOLVIDO</span>;
+            return <span className="badge badge-success whitespace-nowrap">RESOLVIDO</span>;
         case PrismaTicketStatus.CANCELADO:
-            return <span className="badge badge-error ">CANCELADO</span>;
+            return <span className="badge badge-error whitespace-nowrap">CANCELADO</span>;
         default:
-            return <span className="badge badge-ghost">{status}</span>;
+            return <span className="badge badge-ghost whitespace-nowrap">{status}</span>;
     }
 }
 

@@ -56,6 +56,7 @@ export async function handleUpdateTicket(
         description: string;
         openAt: Date;
         status: TicketStatus;
+        closedAt?: Date | null;
     }
 ): Promise<Ticket> {
     try {
@@ -64,11 +65,16 @@ export async function handleUpdateTicket(
             throw new Error("Usuário não autenticado");
         }
 
+        ticketData.closedAt = 
+            (ticketData.status === TicketStatus.RESOLVIDO && !ticketData.closedAt) 
+            ? new Date() : null;
+
         const updatedTicket = await updateTicketById(id_csc, {
             category: ticketData.category,
             description: ticketData.description,
             openAt: ticketData.openAt,
             status: ticketData.status,
+            closedAt: ticketData.closedAt
         });
 
         revalidatePath("/chamados/csc");

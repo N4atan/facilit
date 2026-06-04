@@ -42,6 +42,13 @@ export async function getUserByEmail(email: string): Promise<User | null> {
     });
 }
 
+export async function getUserByName(name: string): Promise<User | null> {
+    return prisma.user.findUnique({
+        where: { name },
+    });
+}
+
+
 export async function deleteUserById(id: string): Promise<User> {
     return prisma.user.delete({ where: { id } });
 }

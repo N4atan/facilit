@@ -14,7 +14,7 @@ datasource db {
 
 model User {
   id                String @id @default(uuid())
-  name              String
+  name              String @unique
   email             String @unique
   password          String
   previousPassword  String
@@ -27,6 +27,7 @@ model Ticket {
   category     String
   description  String
   openAt       DateTime     @db.Date
+  closedAt     DateTime?    @db.Date
   status       TicketStatus @default(EM_ANDAMENTO)
   authorId     String
   author       User         @relation(fields: [authorId], references:[id])
