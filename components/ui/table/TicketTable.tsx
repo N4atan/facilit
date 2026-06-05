@@ -29,7 +29,15 @@ export function TicketStatus(status: PrismaTicketStatus | string) {
     }
 }
 
-
+const keyMap: Record<string, string> = {
+    "id_csc": "Id CSC",
+    "category": "Categoria",
+    "description": "Descrição",
+    "openAt": "Abertura",
+    "closedAt": "Fechamento",
+    "status": "Status",
+    "author": "Aberto p/"
+};
 
 export default function TicketTable({ tickets, isLoading }: Props) {
 
@@ -70,12 +78,9 @@ export default function TicketTable({ tickets, isLoading }: Props) {
                 {/* head */}
                 <thead>
                     <tr>
-                        <th>Id CSC</th>
-                        <th>Categoria</th>
-                        <th>Descrição</th>
-                        <th>Abertura</th>
-                        <th>Status</th>
-                        <th>Aberto p/</th>
+                        {Object.keys(tickets[0]).filter((key) => key !== "id" && key !== "authorId").map((key) => (
+                            <th key={key}>{keyMap[key] || key}</th>
+                        ))}
                         <th></th>
                     </tr>
                 </thead>
@@ -86,6 +91,7 @@ export default function TicketTable({ tickets, isLoading }: Props) {
                             <td>{ticket.category}</td>
                             <td>{ticket.description}</td>
                             <td>{new Date(ticket.openAt).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</td>
+                            <td>{ticket.closedAt ? new Date(ticket.closedAt).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : "-"}</td>
                             <td>{TicketStatus(ticket.status)}</td>
                             <td>{ticket.author.name}</td>
                             <td>

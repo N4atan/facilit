@@ -76,14 +76,14 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
     const formId = ticket ? `form-editTicket-${ticket.id}` : "form-registerTicket";
 
     return (
-        <div className={`card bg-base-100 w-96 shadow-sm ${isModal ? "modal-box" : ""}`}>
+        <div className={`card bg-base-100 max-w-3xl ${isModal ? "modal-box" : ""}`}>
             <div className="card-body">
                 <h2 className="card-title text-xl font-bold">
-                    {ticket ? "Editar Chamado" : "Registrar Novo Chamado"}
+                    {ticket ? "Editar Chamado" : "Registrando Novo Chamado"}
                 </h2>
-                <form id={formId} onSubmit={onSubmit}>
+                <form id={formId} onSubmit={onSubmit} className={`grid grid-cols-1 ${ticket ? "lg:grid-cols-2" : "lg:grid-cols-3"} gap-4`}>
 
-                    <fieldset className="fieldset mt-4">
+                    <fieldset className="fieldset ">
                         <legend className="fieldset-legend">Id da CSC</legend>
                         <label className="input w-full flex items-center gap-2">
                             <ClipboardList size={18} />
@@ -99,7 +99,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                         </label>
                     </fieldset>
 
-                    <fieldset className="fieldset mt-2">
+                    <fieldset className="fieldset">
                         <legend className="fieldset-legend">Categoria</legend>
                         <label className="input w-full flex items-center gap-2">
                             <Tag size={18} />
@@ -115,19 +115,9 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                         </label>
                     </fieldset>
 
-                    <fieldset className="fieldset mt-2">
-                        <legend className="fieldset-legend">Descrição</legend>
-                        <textarea
-                            placeholder="Descrição detalhada do chamado..."
-                            value={description}
-                            disabled={isLoading}
-                            required
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="textarea w-full h-24 resize-vertical"
-                        />
-                    </fieldset>
+                    
 
-                    <fieldset className="fieldset mt-2">
+                    <fieldset className="fieldset ">
                         <legend className="fieldset-legend">Data de Abertura</legend>
                         <div className="date-picker-input">
                             <input
@@ -142,7 +132,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                     </fieldset>
 
                     {ticket && (
-                        <fieldset className="fieldset mt-2">
+                        <fieldset className="fieldset">
                             <legend className="fieldset-legend">Status</legend>
                             <select
                                 value={status}
@@ -159,6 +149,18 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                             </select>
                         </fieldset>
                     )}
+
+                    <fieldset className={`fieldset ${ticket ? "lg:col-span-2" : "lg:col-span-3"}`}>
+                        <legend className="fieldset-legend">Descrição</legend>
+                        <textarea
+                            placeholder="Descrição detalhada do chamado..."
+                            value={description}
+                            disabled={isLoading}
+                            required
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="textarea w-full h-24 resize-vertical"
+                        />
+                    </fieldset>
 
                 </form>
 

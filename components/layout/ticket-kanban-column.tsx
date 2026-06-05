@@ -4,6 +4,7 @@ import { Calendar } from "lucide-react";
 import { TicketStatus } from "@/lib/enums";
 import { TicketWithAuthor } from "@/services/ticket-service";
 import TicketCreateModal from "./ticket-create-modal";
+import { CardTicketKanban } from "../ui/cards/card-ticket-kanban";
 
 interface TicketKanbanColumnProps {
     status: TicketStatus;
@@ -20,7 +21,7 @@ const STATUS_CONFIG: Record<TicketStatus, { label: string; dotClass: string }> =
 export default function TicketKanbanColumn({ status, tickets }: TicketKanbanColumnProps) {
     const config = STATUS_CONFIG[status];
     const filteredTickets = tickets.filter((ticket) => ticket.status === status);
-
+    console.log(filteredTickets)
     return (
         <div className="border border-base-content/10 rounded-lg p-4 gap-5 bg-base-200 flex flex-col h-full">
             <div className="flex gap-2 items-center mb-2">
@@ -37,42 +38,7 @@ export default function TicketKanbanColumn({ status, tickets }: TicketKanbanColu
                     </div>
                 ) : (
                     filteredTickets.map((ticket) => (
-                        <div
-                            key={ticket.id}
-                            className="card bg-base-100 border border-base-content/10 hover:border-base-content/30 transition-all duration-300 rounded-lg p-4 gap-4 shadow-xs"
-                        >
-                            <div className="flex justify-between items-start gap-2">
-                                <p className="card-title text-md font-semibold text-content/80 text-left">
-                                    {ticket.category}
-                                </p>
-                                <span className="text-xs font-mono bg-base-200 px-2 py-0.5 rounded text-content/60 shrink-0">
-                                    #{ticket.id_csc}
-                                </span>
-                            </div>
-                            <p className="text-sm text-content/70 text-left break-words">
-                                {ticket.description}
-                            </p>
-
-                            <div className="card-actions justify-between items-center mt-2 pt-2 border-t border-base-content/5">
-                                <div className="badge badge-ghost gap-1.5 text-xs">
-                                    <Calendar size={12} />
-                                    {new Date(ticket.openAt).toLocaleDateString("pt-BR", { timeZone: "UTC" })}
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <TicketCreateModal isEditing ticket={ticket} />
-                                    <div className="tooltip tooltip-left" data-tip={ticket.author.name}>
-                                        <div className="avatar">
-                                            <div className="w-8 h-8 rounded-full bg-neutral text-neutral-content flex justify-center items-center">
-                                                <span className="text-xs font-bold">
-                                                    {ticket.author.name.slice(0, 1).toUpperCase()}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <CardTicketKanban key={ticket.id} ticket={ticket} />
                     ))
                 )}
             </div>

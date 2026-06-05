@@ -1,0 +1,13 @@
+{
+  "name": "Facilit Dashboard",
+  "description": "Painel de controle do Facilit",
+  "version": "4.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "scripting",
+    "activeTab"
+  ]
+}

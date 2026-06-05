@@ -36,8 +36,8 @@ export default function TicketDashboard({ tickets }: TicketDashboardProps) {
             {tab === "table" ? (
                 <TicketTable tickets={tickets} />
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
-                    <TicketKanbanColumn status={TicketStatus.ABERTO} tickets={tickets} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                    
                     <TicketKanbanColumn status={TicketStatus.EM_ANDAMENTO} tickets={tickets} />
                     <TicketKanbanColumn status={TicketStatus.RESOLVIDO} tickets={tickets} />
                     <TicketKanbanColumn status={TicketStatus.CANCELADO} tickets={tickets} />

@@ -66,7 +66,7 @@ export async function handleUpdateTicket(
         }
 
         ticketData.closedAt = 
-            (ticketData.status === TicketStatus.RESOLVIDO && !ticketData.closedAt) 
+            (ticketData.status === TicketStatus.RESOLVIDO || ticketData.status === TicketStatus.CANCELADO) && !ticketData.closedAt
             ? new Date() : null;
 
         const updatedTicket = await updateTicketById(id_csc, {
