@@ -77,3 +77,8 @@ export async function getTicketsByUser(userId: string): Promise<TicketWithAuthor
         }
     });
 }
+
+export async function checkDuplicateTicket(id_csc: string): Promise<boolean> {
+    const ticket = await prisma.ticket.count({ where: { id_csc } });
+    return ticket > 0;
+}

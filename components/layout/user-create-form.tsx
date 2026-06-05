@@ -51,7 +51,7 @@ export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boo
                         <legend className="fieldset-legend">E-mail</legend>
                         <label htmlFor="" className="input">
                             <Mail size={18} />
-                            <input type="text" placeholder="xxxxxxx@senacrs.com.br" disabled={isLoading} required onChange={(e) => setEmail(e.target.value)} />
+                            <input type="text" placeholder="xxxxxxx@senacrs.com.br" disabled={isLoading} required onChange={(e) => setEmail(e.target.value.toLowerCase().trim())} />
                         </label>
                         <p className="label">Utilize o email institucional para criar login</p>
                     </fieldset>
@@ -60,7 +60,7 @@ export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boo
                         <legend className="fieldset-legend">Nome Completo</legend>
                         <label htmlFor="" className="input">
                             <UserIcon size={18} />
-                            <input type="text" placeholder="Digite o nome completo" disabled={isLoading} required onChange={(e) => setName(e.target.value)} />
+                            <input type="text" placeholder="Digite o nome completo" disabled={isLoading} required onChange={(e) => setName(e.target.value.trim())} />
                         </label>
                     </fieldset>
 
@@ -68,7 +68,7 @@ export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boo
                         <legend className="fieldset-legend">Senha</legend>
                         <label htmlFor="" className="input">
                             <KeyRound size={18} />
-                            <input type="password" placeholder="Digite a senha" disabled={isLoading} required onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" placeholder="Digite a senha" disabled={isLoading} required onChange={(e) => setPassword(e.target.value.trim())} />
                         </label>
                     </fieldset>
 

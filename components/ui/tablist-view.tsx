@@ -33,8 +33,10 @@ export const TabListViewOptions = [
 ]
 
 export const TabListView = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: string) => void }) => {
+
+
     return (
-        <div role="tablist" className="tabs tabs-lift flex-1">
+        <div role="tablist" className="tabs tabs-box">
             {TabListViewOptions.map((op) => (
                 <a key={op.value} role="tab" className={`tab gap-2 ${activeTab === op.value ? "tab-active" : ""}`} onClick={() => setActiveTab(op.value)}>
                     <Icone icon={op.icon} />

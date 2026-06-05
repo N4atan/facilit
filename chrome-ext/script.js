@@ -61,22 +61,22 @@ function getDataInElements() {
         },
         credentials: 'include',
         body: JSON.stringify(payloadAPI)
+    }
+    ).then(async (response) => {
+        if (!response.ok) {
+            const errorText = await response.json();
+            alert(errorText.message);
+            throw new Error(errorText.message);
         }
-        ).then(async (response) => {
-            if (!response.ok) {
-                const errorText = await response.text();
-                alert(errorText);
-                throw new Error(errorText || 'Erro na requisição');
-            }
-            return response.json();
-        })
+        return response.json();
+    })
         .then(data => {
             console.log("Sucesso:", data);
-            alert("Chamado registrado!");
+            alert("Chamado criado com sucesso!");
         })
         .catch(error => {
             console.error("Erro ao criar chamado:", error);
-            alert("Algo deu errado...");
+            alert("Algo deu errado... Tente novamente.");
         });
 }
 

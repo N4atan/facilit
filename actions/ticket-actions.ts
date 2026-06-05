@@ -1,6 +1,6 @@
 "use server";
 
-import { createNewTicket, deleteTicketByIdCSC, getAllTickets, TicketWithAuthor, updateTicketById } from "@/services/ticket-service";
+import { checkDuplicateTicket, createNewTicket, deleteTicketByIdCSC, getAllTickets, TicketWithAuthor, updateTicketById } from "@/services/ticket-service";
 import { Ticket, Prisma } from "@prisma/client";
 import { TicketStatus } from "@/lib/enums";
 import { revalidatePath } from "next/cache";
@@ -31,6 +31,10 @@ export async function handleCreateNewTicket(ticketData: {
         const user = await getUserByEmail(session.user.email);
         if (!user) {
             throw new Error("Usuário não encontrado");
+        }
+
+        if (await checkDuplicateTicket(ticketData.id_csc)) {
+            throw new Error("Chamado já existe");
         }
 
         const newTicket = await createNewTicket({
@@ -65,9 +69,9 @@ export async function handleUpdateTicket(
             throw new Error("Usuário não autenticado");
         }
 
-        ticketData.closedAt = 
+        ticketData.closedAt =
             (ticketData.status === TicketStatus.RESOLVIDO || ticketData.status === TicketStatus.CANCELADO) && !ticketData.closedAt
-            ? new Date() : null;
+                ? new Date() : null;
 
         const updatedTicket = await updateTicketById(id_csc, {
             category: ticketData.category,

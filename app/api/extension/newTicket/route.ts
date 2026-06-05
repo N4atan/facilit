@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma";
+import { checkDuplicateTicket, createNewTicket } from "@/services/ticket-service";
 import { getUserByName } from "@/services/user-service";
 import { revalidatePath } from "next/cache";
 
@@ -29,9 +30,12 @@ export async function POST(req: Request) {
         const { id_csc, description, category, openAt, status, authorName } = await req.json();
 
         if (!id_csc || !description || !category || !openAt || !status || !authorName) {
-            return new Response("Dados inválidos", {
+            return new Response(JSON.stringify({ message: "Dados inválidos" }), {
                 status: 400,
-                headers: responseHeaders
+                headers: {
+                    ...responseHeaders,
+                    "Content-Type": "application/json"
+                }
             });
         }
 
@@ -44,16 +48,24 @@ export async function POST(req: Request) {
             });
         }
 
-        const ticket = await prisma.ticket.create({
-            data: {
-                id_csc,
-                description,
-                category,
-                openAt: new Date(openAt),
-                status,
-                authorId: user.id
-            },
-        });
+        if (await checkDuplicateTicket(id_csc)) {
+            return new Response(JSON.stringify({ message: "Chamado já existe" }), {
+                status: 409,
+                headers: {
+                    ...responseHeaders,
+                    "Content-Type": "application/json"
+                }
+            });
+        }
+
+        const ticket = await createNewTicket({
+            id_csc,
+            description,
+            category,
+            openAt: new Date(openAt),
+            status,
+            authorId: user.id
+        })
 
         revalidatePath("/chamados/csc");
         
@@ -67,9 +79,12 @@ export async function POST(req: Request) {
 
     } catch (error) {
         console.error(error);
-        return new Response("Erro ao criar chamado", {
+        return new Response(JSON.stringify({ message: "Erro ao criar chamado" }), {
             status: 500,
-            headers: responseHeaders
+            headers: {
+                ...responseHeaders,
+                "Content-Type": "application/json"
+            }
         });
     }
 }

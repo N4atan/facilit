@@ -79,7 +79,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
         <div className={`card bg-base-100 max-w-3xl ${isModal ? "modal-box" : ""}`}>
             <div className="card-body">
                 <h2 className="card-title text-xl font-bold">
-                    {ticket ? "Editar Chamado" : "Registrando Novo Chamado"}
+                    {ticket ? "Editar Chamado" : "Novo Chamado"}
                 </h2>
                 <form id={formId} onSubmit={onSubmit} className={`grid grid-cols-1 ${ticket ? "lg:grid-cols-2" : "lg:grid-cols-3"} gap-4`}>
 
@@ -93,7 +93,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                                 value={idCsc}
                                 disabled={isLoading || !!ticket}
                                 required
-                                onChange={(e) => setIdCsc(e.target.value)}
+                                onChange={(e) => setIdCsc(e.target.value.trim())}
                                 className="grow"
                             />
                         </label>
@@ -142,7 +142,6 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                                 className="select w-full"
                             >
                                 <option disabled={true}>Selecione o status</option>
-                                <option value={TicketStatus.ABERTO}>ABERTO</option>
                                 <option value={TicketStatus.EM_ANDAMENTO}>EM ANDAMENTO</option>
                                 <option value={TicketStatus.RESOLVIDO}>RESOLVIDO</option>
                                 <option value={TicketStatus.CANCELADO}>CANCELADO</option>

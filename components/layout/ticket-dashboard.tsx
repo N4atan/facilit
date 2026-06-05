@@ -20,24 +20,26 @@ export default function TicketDashboard({ tickets }: TicketDashboardProps) {
 
     return (
         <div className="card border border-base-content/10 rounded-lg p-4 gap-5">
-            <div className="flex justify-end items-center gap-5 mt-4">
+            <div className="flex flex-wrap justify-between items-center gap-5 mt-4">
                 <TabListView activeTab={tab} setActiveTab={(e) => setTab(e as "table" | "kanban")} />
 
                 {/* TODO: Filtros por autor */}
 
-                <button className="btn btn-soft btn-secondary" onClick={() => exportToExcel({ data: tickets, name: `Facilit-ChamadosCSC` })}>
-                    <CloudDownload size={16} />
-                    Exportar
-                </button>
+                <div className="flex items-center gap-5">
+                    <button className="btn btn-soft btn-secondary" onClick={() => exportToExcel({ data: tickets, name: `Facilit-ChamadosCSC` })}>
+                        <CloudDownload size={16} />
+                        Exportar
+                    </button>
 
-                <TicketCreateModal />
+                    <TicketCreateModal />
+                </div>
             </div>
 
             {tab === "table" ? (
                 <TicketTable tickets={tickets} />
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                    
+
                     <TicketKanbanColumn status={TicketStatus.EM_ANDAMENTO} tickets={tickets} />
                     <TicketKanbanColumn status={TicketStatus.RESOLVIDO} tickets={tickets} />
                     <TicketKanbanColumn status={TicketStatus.CANCELADO} tickets={tickets} />
