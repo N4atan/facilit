@@ -47,7 +47,7 @@ export const CardTicketKanban = (ticket: TicketWithAuthor) => {
             {ticket.status == TicketStatus.RESOLVIDO && (
                 <div className="badge badge-error gap-1.5 text-xs">
                     <CheckCircle2 size={12} />
-                    {new Date(ticket.closedAt).toLocaleDateString("pt-BR", { timeZone: "UTC" })}
+                    {new Date(ticket.closedAt!).toLocaleDateString("pt-BR", { timeZone: "UTC" })}
                 </div>
             )}
 
