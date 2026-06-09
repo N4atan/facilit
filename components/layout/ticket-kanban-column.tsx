@@ -21,7 +21,7 @@ const STATUS_CONFIG: Record<TicketStatus, { label: string; dotClass: string }> =
 export default function TicketKanbanColumn({ status, tickets }: TicketKanbanColumnProps) {
     const config = STATUS_CONFIG[status];
     const filteredTickets = tickets.filter((ticket) => ticket.status === status);
-    console.log(filteredTickets)
+    
     return (
         <div className="border border-base-content/10 rounded-lg p-4 gap-5 bg-base-200 flex flex-col h-full">
             <div className="flex gap-2 items-center mb-2">

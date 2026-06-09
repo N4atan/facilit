@@ -1,10 +1,16 @@
 {
-  "name": "Facilit Dashboard",
-  "description": "Painel de controle do Facilit",
-  "version": "4.0",
+  "name": "Facilit CSC",
+  "description": "Sistema de Chamados CSC",
+  "icons": {
+    "16": "/logo.svg",
+    "48": "/logo.svg",
+    "128": "/logo.svg"
+  },
+  "version": "3.3.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_title": "Facilit"
   },
   "permissions": [
     "scripting",

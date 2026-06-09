@@ -1,9 +1,11 @@
 import { auth } from "@/auth"
 import { logout } from "@/actions/auth-actions";
 import { ActionListItem } from "./action-list-item";
-import { ChevronDown, LogOut, Users } from "lucide-react";
+import { ChevronDown, LogOut, UserKey, Users } from "lucide-react";
 import Link from "next/dist/client/link";
 import { ThemeToggle } from "./ThemeToggle";
+import Logo from '@/public/favicon.svg'
+import Image from 'next/image'
 
 const links = [
     { href: "/chamados/csc", label: "Chamados CSC" },
@@ -29,7 +31,9 @@ export default async function Header() {
                         ))}
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">Facilit - SL</a>
+                <a className="btn btn-ghost text-xl">
+                    <Image src={Logo} alt="Facilit - SL" width={40} />
+                </a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -65,24 +69,25 @@ export default async function Header() {
                         </div>
                         <ul
                             tabIndex={-1}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li className="menu-title text-base-content/70 border-b border-base-200">
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-2 w-52 p-2 shadow">
+                            <li className="menu-title text-base-content/70">
                                 <span>{session.user.email}</span>
                             </li>
-                            <li>
-                                <a className="justify-between">
-                                    Profile
-                                    <span className="badge">New</span>
-                                </a>
-                            </li>
-                            <li><a>Settings</a></li>
+
+                            <li><div className="divider m-0"></div></li>
+                            
+                            <ActionListItem
+                                text="Trocar Senha"
+                                icon={<UserKey size={14} />}
+                                action={logout}
+                            />
 
                             <ThemeToggle />
 
                             {/* Usando o nosso novo componente de item da lista interativo */}
                             <ActionListItem
                                 text="Logout"
-                                icon={<LogOut size={16} />}
+                                icon={<LogOut size={14} />}
                                 action={logout}
                             />
                         </ul>

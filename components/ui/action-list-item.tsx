@@ -24,10 +24,10 @@ export function ActionListItem({ text, icon, action, href }: ActionListItemProps
             ) : (
                 <a
                     onClick={() => startTransition(() => action ? action() : null)}
-                    className={`flex items-center gap-2 cursor-pointer ${isPending ? "opacity-50 pointer-events-none" : ""}`}
+                    className={`flex items-center justify-between gap-2 cursor-pointer ${isPending ? "opacity-50 pointer-events-none" : ""}`}
                 >
-                    {icon && <span>{icon}</span>}
                     {text}
+                    {icon && <span>{icon}</span>}
                     {isPending && <span className="loading loading-spinner loading-xs ml-auto"></span>}
                 </a>
             )}

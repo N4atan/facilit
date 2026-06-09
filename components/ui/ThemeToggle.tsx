@@ -16,7 +16,7 @@ export function ThemeToggle() {
   if (!mounted) {
     return (
       <li className="flex flex-row items-center justify-between w-full opacity-50 select-none">
-        <span>Tema Escuro</span>
+        <span>Alterar Tema</span>
         <Moon size={16} className="text-slate-400" />
       </li>
     );
@@ -27,21 +27,24 @@ export function ThemeToggle() {
   };
 
   return (
-    <li className="flex flex-row items-center justify-between w-full">
-      <span>Tema Escuro</span>
-      <label className="swap swap-rotate">
-        <input
-          type="checkbox"
-          checked={theme === "dracula"}
-          onChange={handleThemeChange}
+    <li>
+      <a className="flex items-center justify-between">
+        <span>Alterar Tema</span>
+        <label className="swap swap-rotate">
+          <input
+            type="checkbox"
+            checked={theme === "dracula"}
+            onChange={handleThemeChange}
         />
 
         {/* sun icon (visible when checked / dark theme) */}
-        <Sun size={16} className="swap-on text-amber-400" />
+        <Sun size={14} className="swap-on text-amber-400" />
 
         {/* moon icon (visible when unchecked / light theme) */}
-        <Moon size={16} className="swap-off text-slate-400" />
+        <Moon size={14} className="swap-off text-slate-400" />
       </label>
+
+      </a>
     </li>
   );
 }
