@@ -31,16 +31,13 @@ function getDataInElements() {
         }
     });
 
-    const statsMap = {
-        "Em atendimento": "EM_ANDAMENTO"
-    }
+    
 
     console.log(date);
 
     const [data, hora] = date["Data de cadastro"].split(" ");
     const [dia, mes, ano] = data.split("/");
     const dataFormat = new Date(ano, mes - 1, dia).toISOString();
-    const statusPrisma = statsMap[date["Situação"]]
     const nomeSolicitante = date["Solicitante"].split('(')[0].trim();
 
     const payloadAPI = {
@@ -48,7 +45,7 @@ function getDataInElements() {
         category: date["Categorização"] || date["Título"],
         description: date["Descrição"],
         openAt: dataFormat,
-        status: statusPrisma,
+        status: "EM_ANDAMENTO",
         authorName: nomeSolicitante
     }
 
@@ -80,11 +77,6 @@ function getDataInElements() {
         });
 }
 
-function Main() {
-    const dados = getDataInElements();
-
-    console.log(prepararDadosParaOBanco(dados));
-}
 
 document.getElementById('form').addEventListener('click', async (e) => {
     e.preventDefault();
