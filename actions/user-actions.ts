@@ -1,5 +1,6 @@
 "use server"
 
+import { auth } from "@/auth";
 import { createNewUser, deleteUserById, getAllUsers, getUserById, getUserByEmail, updateUserById, UserWithoutPassword } from "@/services/user-service";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
@@ -46,6 +47,12 @@ export async function handleFetchAllUsers(): Promise<UserWithoutPassword[]> {
 
 export async function handleDeleteUserById(userId: string): Promise<void> {
     try {
+        const session = await auth();
+
+        if (session?.user?.id === userId) {
+            throw new Error("Você não pode deletar sua própria conta");
+        }
+
         await deleteUserById(userId);
         revalidatePath("/usuarios");
     } catch (error) {

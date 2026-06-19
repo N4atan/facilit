@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { TabListView } from "@/components/ui/tablist-view";
-import { InputSearch } from "@/components/ui/input-search";
+import { TabListView } from "@/components/ui/TabListView";
+import { InputSearch } from "@/components/ui/InputSearch";
 import { CloudDownload } from "lucide-react";
-import TicketCreateModal from "@/components/layout/ticket-create-modal";
-import TicketTable from "@/components/ui/table/TicketTable";
+import TicketCreateModal from "@/components/tickets/TicketCreateModal";
+import TicketTable from "@/components/tickets/TicketTable";
 import { TicketWithAuthor } from "@/services/ticket-service";
 import { TicketStatus } from "@/lib/enums";
-import TicketKanbanColumn from "./ticket-kanban-column";
+import TicketKanbanColumn from "./TicketKanbanColumn";
 import { exportToExcel } from "@/lib/xlsx-exportes";
 
 interface TicketDashboardProps {

@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 
-
 export const showCodeToast = (message: string, code: any, styleText: string) => {
   toast(
     (t) => (

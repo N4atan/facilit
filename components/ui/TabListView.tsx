@@ -33,8 +33,6 @@ export const TabListViewOptions = [
 ]
 
 export const TabListView = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: string) => void }) => {
-
-
     return (
         <div role="tablist" className="tabs tabs-box">
             {TabListViewOptions.map((op) => (

@@ -1,20 +1,42 @@
 "use client";
 
 import { UserWithoutPassword } from "@/services/user-service"
-import { UserX } from "lucide-react";
+import { RotateCcwKey, UserX } from "lucide-react";
 import { handleDeleteUserById } from "@/actions/user-actions";
 import toast from "react-hot-toast";
-import { showCodeToast } from "@/components/ui/toast-code";
+import { showCodeToast } from "@/components/ui/ToastCode";
 
 type Props = {
     users: UserWithoutPassword[];
     isLoading?: boolean;
 }
 
+const keyMap: Record<string, string> = {
+    "id": "Id",
+    "name": "Nome",
+    "email": "Email",
+    "role": "Perfil",
+    "status": "Status",
+    "createdAt": "Criado em"
+};
+
+const roleMap: Record<string, string> = {
+    "ADMIN": "badge badge-info",
+    "USER": "badge badge-secondary",
+};
+
+const statusMap: Record<string, string> = {
+    "ATIVO": "badge badge-success",
+    "INATIVO": "badge badge-error",
+};
+
 export default function UserTable({ users, isLoading }: Props) {
     const handleDelete = async (id: string) => {
         try {
+            if (!confirm("Tem certeza que deseja remover este usuário?")) return;
+            
             await handleDeleteUserById(id);
+
             toast.success("Usuário removido com sucesso!");
         } catch (error: any) {
             showCodeToast("Erro ao remover usuário", error.message, "error");
@@ -46,9 +68,9 @@ export default function UserTable({ users, isLoading }: Props) {
                 {/* head */}
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
+                        {Object.keys(keyMap).map((key) => (
+                            <th key={key}>{keyMap[key]}</th>
+                        ))}
                         <th></th>
                     </tr>
                 </thead>
@@ -58,7 +80,13 @@ export default function UserTable({ users, isLoading }: Props) {
                             <td>{user.id}</td>
                             <td>{user.name}</td>
                             <td>{user.email}</td>
+                            <td><span className={roleMap[user.role]}>{user.role}</span></td>
+                            <td><span className={statusMap[user.status]}>{user.status}</span></td>
+                            <td>{new Date(user.createdAt).toLocaleDateString('pt-BR')}</td>
                             <td>
+                                <button className="btn btn-sm btn-ghost tooltip tooltip-neutral" data-tip="Resetar Senha" onClick={() => handleDelete(user.id)}>
+                                    <RotateCcwKey size={16} />
+                                </button>
                                 <button className="btn btn-sm btn-ghost tooltip tooltip-error" data-tip="Remover" onClick={() => handleDelete(user.id)}>
                                     <UserX size={16} color="red" />
                                 </button>

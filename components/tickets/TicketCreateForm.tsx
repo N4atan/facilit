@@ -5,7 +5,7 @@ import { Ticket } from "@prisma/client";
 import { TicketStatus } from "@/lib/enums";
 import { handleCreateNewTicket, handleUpdateTicket } from "@/actions/ticket-actions";
 import { ClipboardList, Tag } from "lucide-react";
-import { showCodeToast } from "../ui/toast-code";
+import { showCodeToast } from "@/components/ui/ToastCode";
 import toast from "react-hot-toast";
 
 interface TicketCreateFormProps {
@@ -114,8 +114,6 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
                             />
                         </label>
                     </fieldset>
-
-                    
 
                     <fieldset className="fieldset ">
                         <legend className="fieldset-legend">Data de Abertura</legend>

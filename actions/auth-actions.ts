@@ -11,13 +11,17 @@ export async function authenticate({ email, password }: { email: string, passwor
     await signIn("credentials", { email, password })
     
   } catch (error) {
+    console.log(error);
     if (error instanceof AuthError) {
 
       switch (error.type) {
         case "CredentialsSignin":
-          return "E-mail ou senha inválidos."
+          if ((error as any).code === "user_inactive") {
+            throw new Error("Sua conta está desativada. Entre em contato com o administrador.")
+          }
+          throw new Error("E-mail ou senha inválidos.")
         default:
-          return "Ocorreu um erro inesperado."
+          throw new Error("Ocorreu um erro inesperado.")
       }
     }
     // IMPORTANTE: Você precisa lançar o erro novamente se não for um AuthError

@@ -4,10 +4,8 @@ import { useState, useEffect } from "react";
 import { User } from "@prisma/client";
 import { handleCreateNewUser } from "@/actions/user-actions";
 import { KeyIcon, KeyRound, Link, Mail, User as UserIcon } from "lucide-react";
-import { showCodeToast } from "@/components/ui/toast-code";
+import { showCodeToast } from "@/components/ui/ToastCode";
 import toast from "react-hot-toast";
-
-
 
 export const RegisterForm = ({ setIsLogin }: { setIsLogin: (isLogin: boolean) => void }) => {
     const [name, setName] = useState("");

@@ -1,4 +1,4 @@
-import TicketCreateModal from "@/components/layout/ticket-create-modal"
+import TicketCreateModal from "@/components/tickets/TicketCreateModal"
 import { TicketWithAuthor } from "@/services/ticket-service"
 import { TicketStatus } from "@prisma/client";
 import { Calendar, Clock, CheckCircle2, X } from "lucide-react"

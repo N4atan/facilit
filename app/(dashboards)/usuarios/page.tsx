@@ -1,8 +1,8 @@
 import { handleFetchAllUsers } from "@/actions/user-actions";
-import UserTable from "@/components/ui/table/UserTable";
-import AddUserModal from "@/components/layout/AddUserModal";
+import UserTable from "@/components/users/UserTable";
+import AddUserModal from "@/components/users/AddUserModal";
 import { Suspense, use } from "react";
-import { InputSearch } from "@/components/ui/input-search";
+import { InputSearch } from "@/components/ui/InputSearch";
 
 export default function Home() {
     const users = use(handleFetchAllUsers());

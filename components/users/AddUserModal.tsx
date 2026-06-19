@@ -1,7 +1,7 @@
 "use client";
 
 import { UserPlus } from "lucide-react";
-import UserCreateForm from "./user-create-form";
+import UserCreateForm from "./UserCreateForm";
 
 export default function AddUserModal() {
     const openModal = () => {

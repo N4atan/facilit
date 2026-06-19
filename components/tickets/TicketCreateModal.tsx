@@ -1,7 +1,7 @@
 "use client";
 
 import { FileEdit, FilePen, FilePlusCorner } from "lucide-react";
-import TicketCreateForm from "./ticket-create-form";
+import TicketCreateForm from "./TicketCreateForm";
 import { Ticket } from "@prisma/client";
 
 type Props = {

@@ -3,9 +3,9 @@
 import { FilePen, File, FileX } from "lucide-react";
 import { TicketWithAuthor } from "@/services/ticket-service";
 import toast from "react-hot-toast";
-import { showCodeToast } from "../toast-code";
+import { showCodeToast } from "@/components/ui/ToastCode";
 import { handleDeleteTicketByIdCSC } from "@/actions/ticket-actions";
-import TicketCreateModal from "@/components/layout/ticket-create-modal";
+import TicketCreateModal from "@/components/tickets/TicketCreateModal";
 
 type Props = {
     tickets: TicketWithAuthor[];

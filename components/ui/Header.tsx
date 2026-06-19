@@ -1,11 +1,12 @@
 import { auth } from "@/auth"
 import { logout } from "@/actions/auth-actions";
-import { ActionListItem } from "./action-list-item";
+import { ActionListItem } from "./ActionListItem";
 import { ChevronDown, LogOut, UserKey, Users } from "lucide-react";
 import Link from "next/dist/client/link";
 import { ThemeToggle } from "./ThemeToggle";
 import Logo from '@/public/favicon.svg'
 import Image from 'next/image'
+import { UserRole } from "@prisma/client";
 
 const links = [
     { href: "/chamados/csc", label: "Chamados CSC" },
@@ -13,6 +14,8 @@ const links = [
 
 export default async function Header() {
     const session = await auth();
+
+    console.log(session)
 
     return (
         <header className="navbar bg-base-100 shadow-sm">
@@ -42,19 +45,21 @@ export default async function Header() {
                             <Link href={link.href}>{link.label}</Link>
                         </li>
                     ))}
-                    <li className="dropdown">
-                        <div tabIndex={0} >
-                            Administrador
-                            <ChevronDown size={12} />
-                        </div>
-                        <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <ActionListItem
-                                text="Usuários"
-                                icon={<Users size={16} />}
-                                href="/usuarios"
-                            />
-                        </ul>
-                    </li>
+                    {session?.user?.role === UserRole.ADMIN && (
+                        <li className="dropdown">
+                            <div tabIndex={0} >
+                                Administrador
+                                <ChevronDown size={12} />
+                            </div>
+                            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                                <ActionListItem
+                                    text="Usuários"
+                                    icon={<Users size={16} />}
+                                    href="/usuarios"
+                                />
+                            </ul>
+                        </li>
+                    )}
                 </ul>
             </div>
             <div className="navbar-end">

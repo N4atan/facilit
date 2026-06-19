@@ -1,6 +1,5 @@
 import { Search } from "lucide-react";
 
-
 export function InputSearch({ placeholder }: { placeholder: string }) {
     return (
         <div className="join">

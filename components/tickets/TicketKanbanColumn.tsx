@@ -3,8 +3,8 @@
 import { Calendar } from "lucide-react";
 import { TicketStatus } from "@/lib/enums";
 import { TicketWithAuthor } from "@/services/ticket-service";
-import TicketCreateModal from "./ticket-create-modal";
-import { CardTicketKanban } from "../ui/cards/card-ticket-kanban";
+import TicketCreateModal from "./TicketCreateModal";
+import { CardTicketKanban } from "./CardTicketKanban";
 
 interface TicketKanbanColumnProps {
     status: TicketStatus;

@@ -1,5 +1,5 @@
 import { handleFetchAllTickets } from "@/actions/ticket-actions";
-import TicketDashboard from "@/components/layout/ticket-dashboard";
+import TicketDashboard from "@/components/tickets/TicketDashboard";
 import { TicketStatus } from "@/lib/enums";
 
 export default async function Home() {

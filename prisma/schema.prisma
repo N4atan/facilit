@@ -19,6 +19,9 @@ model User {
   password          String
   previousPassword  String
   tickets           Ticket[]
+  status            UserStatus @default(INATIVO)
+  role              UserRole   @default(USER)
+  createdAt         DateTime   @default(now()) @db.Date
 }
 
 model Ticket {
@@ -38,4 +41,14 @@ enum TicketStatus {
   EM_ANDAMENTO
   RESOLVIDO
   CANCELADO
+}
+
+enum UserStatus {
+  ATIVO
+  INATIVO
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

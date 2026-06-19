@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { User } from "@prisma/client";
 import { handleCreateNewUser } from "@/actions/user-actions";
 import { KeyIcon, KeyRound, Mail, User as UserIcon } from "lucide-react";
-import { showCodeToast } from "../ui/toast-code";
-
+import { showCodeToast } from "@/components/ui/ToastCode";
 
 export default function UserCreateForm({isModal, onCreateUser } : {isModal?: boolean, onCreateUser?: () => void}) {
     const [name, setName] = useState("");

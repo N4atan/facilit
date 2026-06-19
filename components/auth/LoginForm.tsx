@@ -5,7 +5,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { authenticate } from "@/actions/auth-actions";
 
-
 export const LoginForm = ({ setIsLogin }: { setIsLogin: (isLogin: boolean) => void }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,11 +14,7 @@ export const LoginForm = ({ setIsLogin }: { setIsLogin: (isLogin: boolean) => vo
         try {
             e.preventDefault();
             setIsLoading(true);
-            const result = await authenticate({ email, password });
-            if (result) {
-                toast(result);
-            }
-
+            await authenticate({ email, password });
         } catch (error: any) {
             toast.error(error.message);
         } finally {
@@ -40,7 +35,7 @@ export const LoginForm = ({ setIsLogin }: { setIsLogin: (isLogin: boolean) => vo
                         <legend className="fieldset-legend">E-mail</legend>
                         <label htmlFor="" className="input w-full">
                             <Mail size={18} />
-                            <input type="text" placeholder="email@senacrs.com.br" disabled={isLoading} required onChange={(e) => setEmail(e.target.value)} />
+                            <input type="text" placeholder="email@senacrs.com.br" disabled={isLoading} required onChange={(e) => setEmail(e.target.value.toLowerCase().trim())} />
                         </label>
                     </fieldset>
 
@@ -48,11 +43,9 @@ export const LoginForm = ({ setIsLogin }: { setIsLogin: (isLogin: boolean) => vo
                         <legend className="fieldset-legend">Senha</legend>
                         <label htmlFor="" className="input w-full">
                             <KeyRound size={18} />
-                            <input type="password" placeholder="**********" disabled={isLoading} required onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" placeholder="**********" disabled={isLoading} required onChange={(e) => setPassword(e.target.value.trim())} />
                         </label>
                     </fieldset>
-
-
 
                     <div className="form-control mt-10">
                         <button type="submit" className="btn btn-primary w-full">Entrar</button>
