@@ -23,7 +23,7 @@ export default function TicketKanbanColumn({ status, tickets }: TicketKanbanColu
     const filteredTickets = tickets.filter((ticket) => ticket.status === status);
     
     return (
-        <div className="border border-base-content/10 rounded-lg p-4 gap-5 bg-base-200 flex flex-col h-full">
+        <div className="border border-base-content/10 rounded-lg p-4 gap-5 bg-base-200/40 flex flex-col h-full">
             <div className="flex gap-2 items-center mb-2">
                 <div className={`w-3 h-3 rounded-full ${config.dotClass}`}></div>
                 <h2 className="text-sm font-semibold text-content/60 text-left">
