@@ -137,8 +137,8 @@ export default function CartCreateForm({ isModal, onCreateCart, cart }: CartCrea
 
                     <fieldset className="fieldset">
                         <legend className="fieldset-legend">Escola</legend>
-                            <select className="select grow" value={school} onChange={(e) => setSchool(e.target.value)} defaultValue={'null'} disabled={isLoading} required >
-                                <option disabled value="null">Selecione a escola</option>
+                            <select className="select grow" value={school} onChange={(e) => setSchool(e.target.value)} disabled={isLoading} required >
+                                <option disabled value="">Selecione a escola</option>
                                 <option value="Centro">Centro</option>
                                 <option value="Unisinos">Unisinos</option>
                             </select>

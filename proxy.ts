@@ -9,7 +9,7 @@ export default NextAuth(authConfig).auth((req) => {
   // Se estiver acessando a raiz do site ("/")
   if (isRootPage) {
     if (isLoggedIn) {
-      return Response.redirect(new URL("/usuarios", req.nextUrl))
+      return Response.redirect(new URL("/chamados/csc", req.nextUrl))
     }
     return Response.redirect(new URL("/login", req.nextUrl))
   }

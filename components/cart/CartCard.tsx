@@ -1,0 +1,65 @@
+"use client"
+
+import { handleDeleteCartByPatrimony } from "@/actions/cart-actions";
+import { Cart } from "@prisma/client";
+import { FileBox, Laptop, MapPinCheck, Package, PackageOpen, PackageX, Tag } from "lucide-react";
+import toast from "react-hot-toast";
+import { showCodeToast } from "../ui/ToastCode";
+
+
+export default function CartCard({ cart }: { cart: Cart }) {
+    
+    const onDeleteCartByPatrimony = async (patrimony: string) => {
+        try {
+            const result: Cart = await handleDeleteCartByPatrimony(patrimony);
+            toast.success(`Carrinho ${result.patrimony} deletado com sucesso`);
+        } catch (error: any) {
+            console.error(error);
+            showCodeToast("Erro ao deletar carrinho", error, "error");
+        }
+    };
+    
+    return (
+        <div key={cart.id} className="card card-border card-md w-full lg:max-w-xs hover:border-base-content/30 transition-all duration-200 min-w-[300px]">
+            <div className="card-body">
+                <div className="flex items-center justify-between">
+                    <span className="card-title">{cart.name}</span>
+                    {cart.status === "ABERTO" ? (
+                        <span className="tooltip tooltip-info tooltip-top badge badge-info" data-tip="Em Uso">
+                            <PackageOpen size={16} />
+                        </span>
+                    ) : (
+                        <span className="tooltip tooltip-error tooltip-top badge badge-error" data-tip="Trancado">
+                            <Package size={16} />
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-2 text-base-content/70 mt-2">
+                    <Laptop size={14} />
+                    <span>{cart.actualNotebooks}/{cart.totalNotebooks} Notebooks</span>
+                </div>
+
+                <div className="flex items-center gap-2 text-base-content/70">
+                    <Tag size={14} />
+                    <span>{cart.patrimony}</span>
+                </div>
+
+                <div className="flex items-center gap-2 text-base-content/70">
+                    <MapPinCheck size={14} />
+                    <span>{cart.school} - {cart.room}</span>
+                </div>
+            </div>
+
+            <div className="card-action flex flex-row justify-end gap-2 px-4 p-2 border-t border-base-content/10 ">
+                <button className="btn btn-sm btn-ghost tooltip tooltip-primary text-base-content/70 hover:text-primary" data-tip="Editar">
+                    <FileBox size={16} />
+                </button>
+
+                <button className="btn btn-sm btn-ghost tooltip tooltip-error text-base-content/70 hover:text-error" data-tip="Excluir" onClick={() => onDeleteCartByPatrimony(cart.patrimony)}>
+                    <PackageX size={16} />
+                </button>
+            </div>
+        </div>
+    )
+}

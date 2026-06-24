@@ -19,3 +19,7 @@ export async function checkDuplicatePatrimony(patrimony: string): Promise<boolea
     const count = await prisma.cart.count({ where: { patrimony } });
     return count > 0;
 }
+
+export async function deleteCartByPatrimony(patrimony: string): Promise<Cart> {
+    return prisma.cart.delete({ where: { patrimony } });
+}

@@ -12,7 +12,7 @@ type Props = {
 }
 
 const keyMap: Record<string, string> = {
-    "id": "Id",
+
     "name": "Nome",
     "email": "Email",
     "role": "Perfil",
@@ -77,7 +77,7 @@ export default function UserTable({ users, isLoading }: Props) {
                 <tbody>
                     {users.map((user) => (
                         <tr key={user.id}>
-                            <td>{user.id}</td>
+
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td><span className={roleMap[user.role]}>{user.role}</span></td>

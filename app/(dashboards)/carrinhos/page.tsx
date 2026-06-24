@@ -1,6 +1,9 @@
-import { FolderLock, FolderOpen, Laptop, Tag, User, Folders } from "lucide-react";
+import { Package, PackageOpen, Laptop, Tag, User, PackageSearch, School, MapPinCheck, FileBox, X, PackageX } from "lucide-react";
 import { getAllCarts } from "@/services/cart-service";
 import CartBtnModal from "@/components/cart/CartBtnModal";
+import { handleDeleteCartByPatrimony } from "@/actions/cart-actions";
+import toast from "react-hot-toast";
+import CartCard from "@/components/cart/CartCard";
 
 export default async function Carrinhos() {
     const carts = await getAllCarts();
@@ -9,23 +12,25 @@ export default async function Carrinhos() {
     const inUseCartsCount = carts.filter((c) => c.status === "ABERTO").length;
     const totalCartsCount = carts.length;
 
+    
+
     return (
         <>
             <h1 className="text-3xl font-bold text-content">Gestão de Carrinhos</h1>
 
             <div className="stats border border-base-content/10 stats-vertical md:stats-horizontal">
                 <div className="stat">
-                    <div className="stat-figure text-error"><FolderLock className="w-10 h-10 inline-block" /></div>
+                    <div className="stat-figure text-error"><Package className="w-10 h-10 inline-block" /></div>
                     <div className="stat-title">Carrinhos Trancados</div>
                     <div className="stat-value text-error">{lockedCartsCount}</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-figure text-info"><FolderOpen className="w-10 h-10 inline-block" /></div>
+                    <div className="stat-figure text-info"><PackageOpen className="w-10 h-10 inline-block" /></div>
                     <div className="stat-title">Carrinhos Em Uso</div>
                     <div className="stat-value text-info">{inUseCartsCount}</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-figure"><Folders className="w-10 h-10 inline-block" /></div>
+                    <div className="stat-figure"><PackageSearch className="w-10 h-10 inline-block" /></div>
                     <div className="stat-title">Total de Carrinhos</div>
                     <div className="stat-value">{totalCartsCount}</div>
                 </div>
@@ -45,39 +50,7 @@ export default async function Carrinhos() {
                 ) : (
                     <div className="flex flex-col md:flex-row flex-wrap gap-6">
                         {carts.map((cart) => (
-                            <div key={cart.id} className="card card-border card-md max-w-xs hover:border-base-content/30 transition-all duration-200 min-w-[300px]">
-                                <div className="card-body">
-                                    <div className="flex items-center justify-between">
-                                        <span className="card-title">{cart.name}</span>
-                                        {cart.status === "ABERTO" ? (
-                                            <span className="tooltip tooltip-info tooltip-top badge badge-info" data-tip="Em Uso">
-                                                <FolderOpen size={16} />
-                                            </span>
-                                        ) : (
-                                            <span className="tooltip tooltip-error tooltip-top badge badge-error" data-tip="Trancado">
-                                                <FolderLock size={16} />
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    <div className="flex items-center gap-2 text-base-content/70 mt-2">
-                                        <Laptop size={14} />
-                                        <span>{cart.actualNotebooks}/{cart.totalNotebooks} Notebooks</span>
-                                    </div>
-
-                                    <div className="flex items-center gap-2 text-base-content/70">
-                                        <Tag size={14} />
-                                        <span>{cart.patrimony}</span>
-                                    </div>
-                                </div>
-
-                                <div className="card-action flex flex-row justify-between p-4 border-t border-base-content/10 bg-base-200/30 text-base-content/70">
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-medium text-sm">{cart.school}</span>
-                                    </div>
-                                    <span className="text-sm">{cart.room}</span>
-                                </div>
-                            </div>
+                            <CartCard key={cart.id} cart={cart} />
                         ))}
                     </div>
                 )}
@@ -94,9 +67,9 @@ export default async function Carrinhos() {
                 {true && (
                     <div className="">
                         <ul className="card card-border card-md hover:border-base-content/30 transition-all duration-200">
-                            <li className="last:border-0 border-b border-base-content/10 w-full p-5 px-8 flex flex-row items-center gap-4 hover:bg-base-200/40 transition-all duration-200">
+                            <li className="last:border-0 border-b border-base-content/10 w-full p-2 px-4 lg:p-5 lg:px-8 flex flex-row items-center gap-2 lg:gap-4 hover:bg-base-200/40 transition-all duration-200">
                                 <div className="p-3 rounded-full bg-base-200/30 text-info">
-                                    <FolderOpen size={24} />
+                                    <PackageOpen size={24} />
                                 </div>
 
                                 <div className="flex-1">

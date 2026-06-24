@@ -7,6 +7,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import Logo from '@/public/favicon.svg'
 import Image from 'next/image'
 import { UserRole } from "@prisma/client";
+import { NavBarTitle } from "./NavBarTitle";
 
 const links = [
     { href: "/chamados/csc", label: "Chamados CSC" },
@@ -18,50 +19,16 @@ export default async function Header() {
     console.log(session)
 
     return (
-        <header className="navbar bg-base-100 shadow-sm">
+        <header className="navbar bg-base-100 w-full border-b border-base-content/10">
             <div className="navbar-start">
-                <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
-                    </div>
-                    <ul
-                        tabIndex={-1}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        {links.map((link) => (
-                            <li key={link.href}>
-                                <Link href={link.href}>{link.label}</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <a className="btn btn-ghost text-xl">
-                    <Image src={Logo} alt="Facilit - SL" width={40} />
-                </a>
+                <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
+                    {/* Sidebar toggle icon */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
+                </label>
+
+                <NavBarTitle />
             </div>
-            <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    {links.map((link) => (
-                        <li key={link.href}>
-                            <Link href={link.href}>{link.label}</Link>
-                        </li>
-                    ))}
-                    {session?.user?.role === UserRole.ADMIN && (
-                        <li className="dropdown">
-                            <div tabIndex={0} >
-                                Administrador
-                                <ChevronDown size={12} />
-                            </div>
-                            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                                <ActionListItem
-                                    text="Usuários"
-                                    icon={<Users size={16} />}
-                                    href="/usuarios"
-                                />
-                            </ul>
-                        </li>
-                    )}
-                </ul>
-            </div>
+
             <div className="navbar-end">
                 {session?.user && (
                     <div className="dropdown dropdown-end">
@@ -80,7 +47,7 @@ export default async function Header() {
                             </li>
 
                             <li><div className="divider m-0"></div></li>
-                            
+
                             <ActionListItem
                                 text="Trocar Senha"
                                 icon={<UserKey size={14} />}
