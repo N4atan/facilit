@@ -1,8 +1,6 @@
-import { Package, PackageOpen, Laptop, Tag, User, PackageSearch, School, MapPinCheck, FileBox, X, PackageX } from "lucide-react";
+import { Package, PackageOpen, Laptop, PackageSearch} from "lucide-react";
 import { getAllCarts } from "@/services/cart-service";
 import CartBtnModal from "@/components/cart/CartBtnModal";
-import { handleDeleteCartByPatrimony } from "@/actions/cart-actions";
-import toast from "react-hot-toast";
 import CartCard from "@/components/cart/CartCard";
 
 export default async function Carrinhos() {
@@ -48,7 +46,7 @@ export default async function Carrinhos() {
                         <span>Nenhum carrinho cadastrado</span>
                     </div>
                 ) : (
-                    <div className="flex flex-col md:flex-row flex-wrap gap-6">
+                    <div className="flex flex-col md:flex-row flex-wrap gap-6 justify-center">
                         {carts.map((cart) => (
                             <CartCard key={cart.id} cart={cart} />
                         ))}
@@ -59,7 +57,6 @@ export default async function Carrinhos() {
             <div className="flex flex-col gap-4">
                 <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold text-content">Últimas Movimentações</h2>
-                    <button className="btn btn-primary btn-outline">Registrar Movimentação</button>
                 </div>
 
                 {false ? <div className="border border-base-content/10 border-dashed rounded-md h-52 bg-base-200/30"></div> : null}

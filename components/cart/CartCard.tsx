@@ -2,13 +2,14 @@
 
 import { handleDeleteCartByPatrimony } from "@/actions/cart-actions";
 import { Cart } from "@prisma/client";
-import { FileBox, Laptop, MapPinCheck, Package, PackageOpen, PackageX, Tag } from "lucide-react";
+import { FileBox, Laptop, MapPinCheck, Package, PackageOpen, PackageX, QrCode, Tag } from "lucide-react";
 import toast from "react-hot-toast";
 import { showCodeToast } from "../ui/ToastCode";
+import CardQRCodeBtn from "./CardQRCodeBtn";
 
 
 export default function CartCard({ cart }: { cart: Cart }) {
-    
+
     const onDeleteCartByPatrimony = async (patrimony: string) => {
         try {
             const result: Cart = await handleDeleteCartByPatrimony(patrimony);
@@ -18,7 +19,7 @@ export default function CartCard({ cart }: { cart: Cart }) {
             showCodeToast("Erro ao deletar carrinho", error, "error");
         }
     };
-    
+
     return (
         <div key={cart.id} className="card card-border card-md w-full lg:max-w-xs hover:border-base-content/30 transition-all duration-200 min-w-[300px]">
             <div className="card-body">
@@ -52,6 +53,8 @@ export default function CartCard({ cart }: { cart: Cart }) {
             </div>
 
             <div className="card-action flex flex-row justify-end gap-2 px-4 p-2 border-t border-base-content/10 ">
+                <CardQRCodeBtn cart={cart} />
+
                 <button className="btn btn-sm btn-ghost tooltip tooltip-primary text-base-content/70 hover:text-primary" data-tip="Editar">
                     <FileBox size={16} />
                 </button>
