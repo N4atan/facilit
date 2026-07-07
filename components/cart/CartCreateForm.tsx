@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { Cart } from "@prisma/client";
-import { handleCreateNewCart } from "@/actions/cart-actions";
+import { handleCreateNewCart, handleUpdateCart } from "@/actions/cart-actions";
 import { Tag, School, MapPin, Laptop, ClipboardList } from "lucide-react";
 import { showCodeToast } from "@/components/ui/ToastCode";
 import toast from "react-hot-toast";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CartCreateFormProps {
     isModal?: boolean;
@@ -21,6 +22,33 @@ export default function CartCreateForm({ isModal, onCreateCart, cart }: CartCrea
     const [totalNotebooks, setTotalNotebooks] = useState<number | "">(cart?.totalNotebooks ?? 24);
     const [actualNotebooks, setActualNotebooks] = useState<number | "">(cart?.actualNotebooks ?? 24);
     const [isLoading, setIsLoading] = useState(false);
+    const queryClient = useQueryClient();
+
+
+    const mutationCreateCart = useMutation({
+        mutationFn: handleCreateNewCart,
+        onSuccess: () => {
+            toast.success("Carrinho criado com sucesso!");
+            queryClient.invalidateQueries({ queryKey: ["carts"] });
+            resetForm();
+        },
+    });
+
+    const mutationUpdateCart = useMutation({
+        mutationFn: ({ id, ...cartData }: {
+            id: string;
+            patrimony: string;
+            school: string;
+            room: string;
+            name: string;
+            totalNotebooks: number;
+            actualNotebooks: number;
+        }) => handleUpdateCart(id, cartData),
+        onSuccess: () => {
+            toast.success("Carrinho atualizado com sucesso!");
+            queryClient.invalidateQueries({ queryKey: ["carts"] });
+        },
+    });
 
     const onSubmit = async (e: React.FormEvent) => {
         try {
@@ -32,10 +60,8 @@ export default function CartCreateForm({ isModal, onCreateCart, cart }: CartCrea
             }
 
             if (cart) {
-                // Se no futuro precisar de edição de carrinho:
-                // await handleUpdateCart(cart.id, { ... });
-            } else {
-                const result = await handleCreateNewCart({
+                await mutationUpdateCart.mutateAsync({
+                    id: cart.id,
                     name,
                     patrimony,
                     school,
@@ -43,9 +69,15 @@ export default function CartCreateForm({ isModal, onCreateCart, cart }: CartCrea
                     totalNotebooks: Number(totalNotebooks),
                     actualNotebooks: Number(actualNotebooks),
                 });
-
-                toast.success("Carrinho criado com sucesso!");
-                resetForm();
+            } else {
+                await mutationCreateCart.mutateAsync({
+                    name,
+                    patrimony,
+                    school,
+                    room,
+                    totalNotebooks: Number(totalNotebooks),
+                    actualNotebooks: Number(actualNotebooks),
+                });
             }
 
             if (isModal) {

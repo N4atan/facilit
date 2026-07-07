@@ -1,16 +1,39 @@
-import { Package, PackageOpen, Laptop, PackageSearch} from "lucide-react";
+"use client";
+
+import { Package, PackageOpen, Laptop, PackageSearch } from "lucide-react";
 import { getAllCarts } from "@/services/cart-service";
 import CartBtnModal from "@/components/cart/CartBtnModal";
 import CartCard from "@/components/cart/CartCard";
+import { useQuery } from "@tanstack/react-query";
+import { handleGetAllCarts } from "@/actions/cart-actions";
+import { useEffect, useState } from "react";
 
-export default async function Carrinhos() {
-    const carts = await getAllCarts();
+export default function Carrinhos() {
+    const {
+        data: carts,
+        isLoading,
+        isFetching,
+        isError,
+    } = useQuery({
+        queryKey: ["carts"],
+        queryFn: () => handleGetAllCarts(),
+        refetchInterval: 20000
+    });
 
-    const lockedCartsCount = carts.filter((c) => c.status === "FECHADO").length;
-    const inUseCartsCount = carts.filter((c) => c.status === "ABERTO").length;
-    const totalCartsCount = carts.length;
+    const lockedCartsCount = carts?.filter((c) => c.status === "FECHADO").length;
+    const inUseCartsCount = carts?.filter((c) => c.status === "ABERTO").length;
+    const totalCartsCount = carts?.length;
 
-    
+    const [ filter, setFilter ] = useState<string>("");
+    const [ filterdCarts, setFilteredCarts ] = useState(carts);
+
+    useEffect(() => {
+        if (filter === 'Todas as Salas' ) {
+            setFilteredCarts(carts);
+        } else {
+            setFilteredCarts(carts?.filter(cart => cart.name.toLowerCase().includes(filter.toLowerCase()) || cart.status.toLowerCase().includes(filter.toLowerCase()) || cart.room.toLowerCase().includes(filter.toLowerCase())));
+        }
+    }, [carts, filter]);
 
     return (
         <>
@@ -37,21 +60,32 @@ export default async function Carrinhos() {
             <div className="flex flex-col gap-4">
                 <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold text-content">Lista de Carrinhos</h2>
-                    <CartBtnModal />
+                    <div className="flex gap-2">
+                        <select defaultValue="Todas as Salas" className="select" onChange={(e) => setFilter(e.target.value)}>
+                            <option>Todas as Salas</option>
+                            {Array.from(new Set(carts?.map(cart => cart.room))).map(room => (
+                                <option key={room}>{room}</option>
+                            ))}
+                        </select>
+                        <CartBtnModal />
+                    </div>
                 </div>
 
-                {carts.length === 0 ? (
+                {isFetching || isLoading ? (
+                    <div className="skeleton w-full h-96"></div>
+                ) : carts?.length === 0 ? (
                     <div className="border border-base-content/10 border-dashed rounded-md h-52 bg-base-200/30 flex flex-col gap-2 items-center justify-center text-base-content/50">
                         <Laptop size={32} className="opacity-50" />
-                        <span>Nenhum carrinho cadastrado</span>
-                    </div>
-                ) : (
-                    <div className="flex flex-col md:flex-row flex-wrap gap-6 justify-center">
-                        {carts.map((cart) => (
-                            <CartCard key={cart.id} cart={cart} />
-                        ))}
-                    </div>
-                )}
+                            <span>Nenhum carrinho cadastrado</span>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col md:flex-row flex-wrap gap-6 justify-center">
+                            {filterdCarts?.map((cart) => (
+                                <CartCard key={cart.id} cart={cart} />
+                            ))}
+                        </div>
+                    )
+                }
             </div>
 
             <div className="flex flex-col gap-4">

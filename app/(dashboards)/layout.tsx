@@ -2,6 +2,8 @@ import Header from "@/components/ui/Header";
 import { SideBarContent } from "@/components/ui/SideBarContent";
 import { Boxes, GalleryVertical, GalleryVerticalEnd, Package, PackageSearch, Users } from "lucide-react";
 import Link from "next/link";
+import { QueryProvider } from "@/providers/QueryClientProvider";
+
 
 export default function RootLayout({
     children,
@@ -10,9 +12,7 @@ export default function RootLayout({
 }>) {
     return (
         <>
-
-
-
+        <QueryProvider>
             <div className="drawer lg:drawer-open">
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
@@ -31,6 +31,7 @@ export default function RootLayout({
                     <SideBarContent />
                 </div>
             </div>
+        </QueryProvider>
         </>
     );
 }

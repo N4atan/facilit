@@ -20,7 +20,7 @@ export default function CartBtnModal({ isEditing, cart }: Props) {
     return (
         <>
             {isEditing ? (
-                <button className="btn btn-sm btn-ghost tooltip tooltip-info" data-tip="Editar" onClick={openModal}>
+                <button className="btn btn-sm btn-ghost tooltip tooltip-primary text-base-content/70 hover:text-primary" data-tip="Editar" onClick={openModal}>
                     <Edit size={16} />
                 </button>
             ) : (

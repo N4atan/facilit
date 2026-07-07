@@ -1,14 +1,41 @@
+"use client"
+
 import { handleFetchAllTickets } from "@/actions/ticket-actions";
 import TicketDashboard from "@/components/tickets/TicketDashboard";
 import { TicketStatus } from "@/lib/enums";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Home() {
-    const tickets = await handleFetchAllTickets();
+export default function Home() {
+    
+    const {
+        data: tickets,
+        isLoading,
+        isFetching,
+        isError,
+    } = useQuery({
+        queryKey: ["tickets"],
+        queryFn: () => handleFetchAllTickets(),
+        refetchInterval: 20000
+    });
 
-    const openTicketsCount = tickets.filter(t => t.status === TicketStatus.ABERTO || t.status === TicketStatus.EM_ANDAMENTO).length;
-    const closedTicketsCount = tickets.filter(t => t.status === TicketStatus.RESOLVIDO).length;
-    const cancelTicketsCount = tickets.filter(t => t.status === TicketStatus.CANCELADO).length;
-    const totalTicketsCount = tickets.length;
+    const openTicketsCount = tickets?.filter(t => t.status === TicketStatus.ABERTO || t.status === TicketStatus.EM_ANDAMENTO).length;
+    const closedTicketsCount = tickets?.filter(t => t.status === TicketStatus.RESOLVIDO).length;
+    const cancelTicketsCount = tickets?.filter(t => t.status === TicketStatus.CANCELADO).length;
+    const totalTicketsCount = tickets?.length;
+
+    if (isLoading) {
+        return (
+            <div className="skeleton w-full h-96"></div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="alert alert-error">
+                <span className="text-error">Erro ao carregar chamados</span>
+            </div>
+        )
+    }
 
     return (
         <>
@@ -34,7 +61,7 @@ export default async function Home() {
                 </div>
             </div>
 
-            <TicketDashboard tickets={tickets} />
+            {tickets && <TicketDashboard tickets={tickets} isFetching={isFetching} />}
         </>
     );
 }

@@ -7,6 +7,7 @@ import { handleCreateNewTicket, handleUpdateTicket } from "@/actions/ticket-acti
 import { ClipboardList, Tag } from "lucide-react";
 import { showCodeToast } from "@/components/ui/ToastCode";
 import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TicketCreateFormProps {
     isModal?: boolean;
@@ -27,6 +28,7 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
         (ticket?.status as unknown as TicketStatus) || TicketStatus.EM_ANDAMENTO
     );
     const [isLoading, setIsLoading] = useState(false);
+    const queryClient = useQueryClient();
 
     const onSubmit = async (e: React.FormEvent) => {
         try {
@@ -34,24 +36,20 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
             setIsLoading(true);
 
             if (ticket) {
-                const result = await handleUpdateTicket(ticket.id_csc, {
+                await mutationUpdateTicket.mutateAsync({
+                    id_csc: ticket.id_csc,
                     category,
                     description,
                     openAt: new Date(openAt),
                     status,
                 });
-
-                showCodeToast("Chamado atualizado com sucesso!", result, 'success');
             } else {
-                const result = await handleCreateNewTicket({
+                await mutationCreateNewTicket.mutateAsync({
                     id_csc: idCsc,
                     category,
                     description,
                     openAt: new Date(openAt),
                 });
-
-                toast.success("Chamado criado com sucesso!");
-                resetForm();
             }
 
             if (isModal) {
@@ -65,6 +63,31 @@ export default function TicketCreateForm({ isModal, onCreateTicket, ticket }: Ti
             setIsLoading(false);
         }
     };
+
+    const mutationCreateNewTicket = useMutation({
+        mutationFn: handleCreateNewTicket,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tickets"] });
+            toast.success("Chamado criado com sucesso!");
+            resetForm();
+        },
+    });
+
+    const mutationUpdateTicket = useMutation({
+        mutationFn: ({ id_csc, ...ticketData }: {
+            id_csc: string;
+            category: string;
+            description: string;
+            openAt: Date;
+            status: TicketStatus;
+        }) => handleUpdateTicket(id_csc, ticketData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["tickets"] });
+            toast.success("Chamado atualizado com sucesso!");
+        },
+    });
+
+
 
     const resetForm = () => {
         setIdCsc("");

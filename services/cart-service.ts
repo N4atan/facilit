@@ -23,3 +23,16 @@ export async function checkDuplicatePatrimony(patrimony: string): Promise<boolea
 export async function deleteCartByPatrimony(patrimony: string): Promise<Cart> {
     return prisma.cart.delete({ where: { patrimony } });
 }
+
+export async function getCartById(id: string): Promise<Cart | null> {
+    return prisma.cart.findUnique({
+        where: { id }
+    });
+}
+
+export async function updateCart(id: string, cart: Prisma.CartUncheckedUpdateInput): Promise<Cart> {
+    return prisma.cart.update({
+        where: { id },
+        data: cart
+    });
+}

@@ -87,12 +87,12 @@ model CartLog {
   openedAt        DateTime  @default(now())
   openedQuantity  Int       // Quantidade de notebooks na abertura
   teacherName     String    // Nome do professor que solicitou
-  room            String    // Sala de aula destino
+  notesAtOpen            String?    
   
   // Informações de Fechamento (opcionais até que o carrinho seja devolvido)
   closedById      String?   // ID do usuário da TI/Atendimento que fechou
   closedBy        User?     @relation("CartLogClosedBy", fields: [closedById], references: [id])
   closedAt        DateTime? 
   closedQuantity  Int?      // Quantidade de notebooks no fechamento
-  notes           String?   // Observações (ex: "Notebook 04 não liga")
+  notesAtClose           String?   // Observações (ex: "Notebook 04 não liga")
 }

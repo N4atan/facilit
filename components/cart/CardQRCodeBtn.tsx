@@ -31,7 +31,7 @@ export default function CardQRCodeBtn({ cart }: { cart: Cart }) {
 
                     <div className="w-full flex flex-col items-center justify-center gap-4">
                         <div className="w-56 rounded  p-4 border border-base-content/10">
-                            <img src="https://img.daisyui.com/images/profile/demo/superperson@192.webp" className="hover:opacity-0 transition-all duration-300" />
+                            <img src="https://img.daisyui.com/images/profile/demo/superperson@192.webp"  />
                         </div>
 
                         <p className="text-base-content/70 text-sm text-center">Imprima este código e fixe no carrinho. A leitura levará direto para a página de formulário.</p>
@@ -40,11 +40,11 @@ export default function CardQRCodeBtn({ cart }: { cart: Cart }) {
                     <div className="join mt-5 flex items-center justify-center">
                         <label htmlFor="" className="input join-item disabled ">
                             <Link2 size={16} />
-                            <input type="url" disabled value={''} />
+                            <input type="url" disabled value={`/carrinhos/${cart.id}`} />
 
                         </label>
 
-                        <Link href={''} className="btn btn-primary join-item tooltip tooltip-primary" data-tip='Abrir formulário'>
+                        <Link href={`/carrinhos/${cart.id}`} className="btn btn-primary join-item tooltip tooltip-primary" data-tip='Abrir formulário'>
                             <ExternalLink size={16} />
                         </Link>
                     </div>
