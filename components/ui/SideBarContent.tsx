@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { GalleryVerticalEnd, Home, Package, Users } from "lucide-react";
+import { Book, GalleryVerticalEnd, Home, Package, Users } from "lucide-react";
 import Link from "next/link";
 
 
@@ -32,6 +32,13 @@ export async function SideBarContent () {
                     <Link href={"/carrinhos"} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2" data-tip="Carrinhos">
                         <Package size={16} className="my-1.5 inline-block size-4" />
                         <span className="is-drawer-close:hidden">Carrinhos</span>
+                    </Link>
+                </li>
+
+                <li>
+                    <Link href={"/docs"} className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-2" data-tip="Documentação">
+                        <Book size={16} className="my-1.5 inline-block size-4" />
+                        <span className="is-drawer-close:hidden">Documentação</span>
                     </Link>
                 </li>
 

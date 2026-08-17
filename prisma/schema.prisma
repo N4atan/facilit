@@ -1,41 +1,66 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
-
 model User {
-  id                String @id @default(uuid())
-  name              String @unique
-  email             String @unique
-  password          String
-  previousPassword  String
-  tickets           Ticket[]
-  status            UserStatus @default(INATIVO)
-  role              UserRole   @default(USER)
-  createdAt         DateTime   @default(now()) @db.Date
-  openedLogs        CartLog[]  @relation("CartLogOpenedBy")
-  closedLogs        CartLog[]  @relation("CartLogClosedBy")
+  id               String     @id @default(uuid())
+  name             String     @unique
+  email            String     @unique
+  password         String
+  previousPassword String
+  createdAt        DateTime   @default(now()) @db.Date
+  role             UserRole   @default(USER)
+  status           UserStatus @default(INATIVO)
+  closedLogs       CartLog[]  @relation("CartLogClosedBy")
+  openedLogs       CartLog[]  @relation("CartLogOpenedBy")
+  tickets          Ticket[]
 }
 
 model Ticket {
-  id           String       @id @default(uuid())
-  id_csc       String       @unique
-  category     String
-  description  String
-  openAt       DateTime     @db.Date
-  closedAt     DateTime?    @db.Date
-  status       TicketStatus @default(EM_ANDAMENTO)
-  authorId     String
-  author       User         @relation(fields: [authorId], references:[id])
+  id          String       @id @default(uuid())
+  id_csc      String       @unique
+  category    String
+  description String
+  openAt      DateTime     @db.Date
+  authorId    String
+  status      TicketStatus @default(EM_ANDAMENTO)
+  closedAt    DateTime?    @db.Date
+  author      User         @relation(fields: [authorId], references: [id])
+}
+
+model Cart {
+  id              String     @id @default(uuid())
+  patrimony       String     @unique
+  school          String
+  room            String
+  name            String
+  totalNotebooks  Int
+  actualNotebooks Int
+  status          CartStatus @default(FECHADO)
+  createdAt       DateTime   @default(now()) @db.Date
+  updatedAt       DateTime   @default(now()) @db.Date
+  logs            CartLog[]
+}
+
+model CartLog {
+  id             String    @id @default(uuid())
+  cartId         String
+  openedById     String
+  openedAt       DateTime  @default(now())
+  openedQuantity Int
+  teacherName    String
+  closedById     String?
+  closedAt       DateTime?
+  closedQuantity Int?
+  notesAtClose   String?
+  notesAtOpen    String?
+  cart           Cart      @relation(fields: [cartId], references: [id])
+  closedBy       User?     @relation("CartLogClosedBy", fields: [closedById], references: [id])
+  openedBy       User      @relation("CartLogOpenedBy", fields: [openedById], references: [id])
 }
 
 enum TicketStatus {
@@ -55,44 +80,24 @@ enum UserRole {
   USER
 }
 
-
 enum CartStatus {
   FECHADO
   ABERTO
 }
 
-model Cart {
-  id String @id @default(uuid())
-  patrimony String @unique
-  school String
-  room String
-  name String
-  totalNotebooks Int
-  actualNotebooks Int
-  status CartStatus @default(FECHADO)
-  createdAt DateTime @default(now()) @db.Date
-  updatedAt DateTime @default(now()) @db.Date
 
-  logs CartLog[]
+enum CategoryDocs {
+  INFRAESTRUTURA
+  ROTINA
+  EVENTOS
+  SISTEMAS
 }
 
-model CartLog {
-  id              String    @id @default(uuid())
-  cartId          String
-  cart            Cart      @relation(fields: [cartId], references: [id])
-  
-  // Informações de Abertura
-  openedById      String    // ID do usuário da TI/Atendimento que abriu
-  openedBy        User      @relation("CartLogOpenedBy", fields: [openedById], references: [id])
-  openedAt        DateTime  @default(now())
-  openedQuantity  Int       // Quantidade de notebooks na abertura
-  teacherName     String    // Nome do professor que solicitou
-  notesAtOpen            String?    
-  
-  // Informações de Fechamento (opcionais até que o carrinho seja devolvido)
-  closedById      String?   // ID do usuário da TI/Atendimento que fechou
-  closedBy        User?     @relation("CartLogClosedBy", fields: [closedById], references: [id])
-  closedAt        DateTime? 
-  closedQuantity  Int?      // Quantidade de notebooks no fechamento
-  notesAtClose           String?   // Observações (ex: "Notebook 04 não liga")
+model Document {
+  id               String     @id @default(uuid())
+  title String
+  slug  String @unique
+  category CategoryDocs
+  description String
+  lastUpdated DateTime @default(now())
 }
